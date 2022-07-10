@@ -117,7 +117,7 @@ div,li{  /*border，padding不扩充宽高*/
 /*在992和1199像素之间，PC小屏*/
 @media (min-width: 992px) and (max-width: 1199px) {
 	#nav  .nav-logo{
-		margin-left: 8px;
+		margin-left: 1px;
 	}
  	#nav .word-hidden{
  		display: none;
@@ -129,10 +129,10 @@ div,li{  /*border，padding不扩充宽高*/
 /*在768和991像素之间，PAD端*/
 @media (min-width: 768px) and (max-width: 991px) {
 	#nav  .nav-logo{
-		margin-left: 8px;
+		margin-left: 1px;
 	}
 	#nav .nav-links a {
-		width: 82px;
+		width: 75px;
 	}
 	#nav .desc-hidden,
 	#nav .word-hidden{
@@ -142,10 +142,10 @@ div,li{  /*border，padding不扩充宽高*/
 /*在480和767像素之间，高分辨率手机端*/
 @media (min-width: 480px) and (max-width: 767px) {
 	#nav  .nav-logo{
-		margin-left: 8px;
+		margin-left: 1px;
 	}
 	#nav .nav-links a {
-		width: 82px;
+		width: 75px;
 	}
 	#nav .desc-hidden,
 	#nav .word-hidden,
@@ -159,7 +159,7 @@ div,li{  /*border，padding不扩充宽高*/
 		margin-left: 1px;
 	}
 	#nav .nav-links a {
-		width: 82px;
+		width: 65px;
 	}
 	#nav .desc-hidden,
 	#nav .word-hidden,
