@@ -14,13 +14,13 @@
 	letter-spacing: 1.2px;
 }
 #content .text-header h1{
-	font-size: 30px;
+	font-size: 35px;
 	color: #dedede;
 	text-align: center;
 	border-bottom: 1px solid #1ea65c;
 	padding-bottom: 10px;
 	margin-bottom: 40px;
-	margin-top: 20px;
+	margin-top: 40px;
 }
 #content .text-body h2{
 	color: #d6d6d6;
