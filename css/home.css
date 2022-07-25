@@ -232,22 +232,27 @@
 /*sitemap归档*/
 #content .sitemap .sitemap-ul a{
 	color: #cfcfcf;
+	font-size: 23px;
 }
+
+/*归档页面分类logo*/
+/*程序设计,字体大小*/
 #content .sitemap .sitemap-ul>li:nth-of-type(1){
-	background-image: url("../logo/linux.png");
+	background-image: url("../logo/rust.png");
 	background-repeat: no-repeat;
-	padding-left: 28px;
+	padding-left: 35px;
 }
-/*
+
+/*网站地图标题下方，可扩展的分类 控制每个分类的css
 #content .sitemap .sitemap-ul>li:nth-of-type(2){
 	background-image: url("../logo/linux.png");
 	background-repeat: no-repeat;
-	padding-left: 28px;	
+	padding-left: 35px;	
 }
 #content .sitemap .sitemap-ul>li:nth-of-type(3){
 	background-image: url("../logo/net.png");
 	background-repeat: no-repeat;
-	padding-left: 28px;
+	padding-left: 35px;
 }
 */
 #content .sitemap .sitemap-ul>ul{
@@ -292,6 +297,7 @@
 	border-radius: 4px;
 	color: #c7c5c5;
 	padding: 10px;
+	font-size: 23px;   /*控制归档页面每个h3标签字体大小*/
 }
 #content .col-content{
 	padding-left: 20px;
@@ -302,7 +308,7 @@
 	margin: 0 10px 0 0;
 	padding: 6px 0 6px 6px;
 	border-radius: 4px;
-	font-size: 18px;
+	font-size: 22px;  /*控制归档页面每个子标题字体大小*/
 	color: #c7c5c5;
 	overflow: hidden;
 	white-space: nowrap;
