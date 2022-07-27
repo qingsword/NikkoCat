@@ -60,13 +60,13 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'const_cast continue private public protected __declspec ' +
 					'default delete deprecated dllexport dllimport do dynamic_cast ' +
 					'else enum explicit extern if for friend goto inline ' +
-					'mutable naked namespace new noinline noreturn nothrow ' +
+					'mutable naked namespace noinline noreturn nothrow ' +
 					'register reinterpret_cast return selectany ' +
 					'sizeof static static_cast struct switch template this ' +
 					'thread throw true false try typedef typeid typename union ' +
 					'using uuid virtual void volatile whcar_t while';
 					
-	var functions =	'main println assert isalnum isalpha iscntrl isdigit isgraph islower isprint' +
+	var functions =	'Err Ok cmp read_line expect stdin new trim parse main println assert isalnum isalpha iscntrl isdigit isgraph islower isprint' +
 					'ispunct isspace isupper isxdigit tolower toupper errno localeconv ' +
 					'setlocale acos asin atan atan2 ceil cos cosh exp fabs floor fmod ' +
 					'frexp ldexp log log10 modf pow sin sinh sqrt tan tanh jmp_buf ' +
