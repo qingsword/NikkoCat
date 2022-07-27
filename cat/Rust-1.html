@@ -8,7 +8,7 @@
 	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
 	<meta name="author" content="NikkoCat.COM">
 	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
-	<title>NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<title>Rust-1-编译基础 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -16,7 +16,7 @@
 	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
 	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
 	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushBash.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
 	<script type="text/javascript">
 	SyntaxHighlighter.all();
 	</script>
@@ -63,50 +63,168 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>标题</h1>	
+					<h1>Rust-1-编译基础</h1>	
 				</header><!-- /header -->
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>引言内容。</p>
+					<p>这篇文章介绍Rust基础，包括通过rustc直接编译，通过cargo规范编译，基本的输入输出语法，随机选择器的使用，match比较语法的使用。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#pt-1">0×1.</a></li>
-						 <li><a href="#pt-2">0×2.</a></li>
-						 <li><a href="#pt-3">0×3.</a></li>
+						 <li><a href="#Rust-base-1">0×1.通过rustc直接编译程序</a></li>
+						 <li><a href="#Rust-base-2">0×2.通过cargo规范编译程序</a></li>
+						 <li><a href="#Rust-base-3">0×3.一个猜数小程序</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="pt-1">0×1.</h2>
+					<h2 id="Rust-base-1">0×1.通过rustc直接编译程序</h2>
 
-					<p>。。。</p>
-					<pre class="brush: bash;">
-					
+					<p>如果只是写一些小应用，并不需要使用cargo规范，可以直接使用rustc进行编译，如下：</p>
+					<p>*注：Rust系列所有程序都在linux系统中测试执行，如果您是Windows系统，生成的文件后缀是.exe，执行方法会有所不同。</p>
+					<pre class="brush: c;">
+					//用记事本写一个小程序，保存为.rs结尾的文件,本例保存为"nikkocat.rs"
+					fn main() {
+					    println!("Hello NikkoCat.com");
+					}
+
+					//在命令行中执行 "rustc 文件名"
+					rustc nikkocat.rs
+
+					//执行结果，会在命令行所在文件夹中生成nikkocat可执行程序，直接执行这个程序
+					 ./nikkocat
+					Hello NikkoCat.com
 					</pre>
-					<img src="images/.jpg" alt="images/">
-					<p class="indent-p"></p>
 
-					<h2 id="pt-2">0×2.</h2>
-					
-					<p>。。。</p>
-					<pre class="brush: bash;">
-					
+					<h2 id="Rust-base-2">0×2.通过cargo规范编译程序</h2>
+					<p>
+					复杂项目构建，使用cargo规范：
+					</p>
+					<p class="indent-p">    
+						使用 cargo new [文件夹名称]，来构建项目文件夹；<br>
+						使用 cargo build 编译项目，会在nikkocat/target/debug中生成与项目文件夹同名的可执行文件;<br>
+					    使用 cargo run 一步构建并执行;<br>
+					    使用 cargo check 在不生成二进制文件的情况下构建项目来检查错误;<br>
+					    有别于将构建结果放在与源码相同的目录，Cargo 会将其放到 target/debug 目录;<br>
+					    当项目最终准备好发布时，可以使用 cargo build --release 来优化编译项目;<br>
+					    这会在 target/release 而不是 target/debug 下生成可执行文件;<br>
+					</p>
+
+					<h2 id="Rust-base-3">0×3.一个猜数小程序</h2>
+
+					<pre class="brush: c;">
+					//使用cargo规范创建一个猜数小程序，在终端中执行下面的命令
+					cargo new guess_game 
+
+					//进入项目文件夹，编辑Cargo.toml文件
+					cd guess_game 
+					vim Cargo.toml   
+
+					//在文件中添加下面这一行代码到 [dependencies] 片段标题之下
+					//这里需要这样手动定义一下rand类的版本，否则程序无法编译
+					rand = "0.8.3"
+
+					//进入src文件夹，编辑main.rs文件，输入下面这段完整代码
+
+					use std::io;
+					use std::cmp::Ordering;
+					use rand::Rng;
+
+					fn main() {
+					    println!("Guess the number!");
+
+					    let secret_number = rand::thread_rng().gen_range(1..101);
+
+					    loop {
+					        println!("Please input your guess.");
+
+					        let mut guess = String::new();
+
+					        io::stdin()
+					        .read_line(&mut guess)
+					        .expect("Failed to read line");
+
+					        let guess: u32 = match guess.trim().parse() {
+					            Ok(num) => num,
+					            Err(_) => continue,
+					        };
+
+					        println!("You guessed: {}", guess);
+
+					        match guess.cmp(&secret_number) {
+					            Ordering::Less => println!("Too small!"),
+					            Ordering::Greater => println!("Too big!"),
+					            Ordering::Equal => {
+					                println!("You win!");
+					                break;
+					            }
+					        }
+					    }
+					}
 					</pre>
-					<img src="images/.jpg" alt="images/">
-					<p class="indent-p"></p>
-
-					<h2 id="pt-3">0×3.</h2>
-
-					<p>。。。</p>
-					<pre class="brush: bash;">
-					
+					<p>我们来拆解一下这段代码，首先头文件：</p>
+					<pre class="brush: c;">
+					//使用use关键词，作用是引用一些现成的Rust模块或类
+					use std::io;  //标准输入输出模块，包含println函数
+					use std::cmp::Ordering; //包含数学运算转换和比较的模块
+					use rand::Rng;  //包含随机数生成器的模块
 					</pre>
-					<img src="images/.jpg" alt="images/">
-					<p class="indent-p"></p>
+
+					<p>再来看函数主体：</p>
+					<pre class="brush: c;">
+					fn main() {   //main函数，程序的入口点，系统执行程序时，从这里开始运行
+					    println!("Guess the number!"); //println!函数，打印一行文字在屏幕上显示
+
+					    let secret_number = rand::thread_rng().gen_range(1..101);
+					    //let关键词，用来定义变量，secret_number就是我们自定义的变量名
+					    //rand::thread_rng().gen_range(1..101); 这是一个随机数生成器
+					    //意思就是从rand类里面调用thread_rng()函数的gen_range()函数
+					    //1..101是传递给gen_range()函数的参数
+					    //为什么语法结构是这个样子？设计者这么定义的
+					    //只需要知道，这一句的功能就是从1-100里面随机选择一个数字
+					    //这个数字取出来后存放到secret_number变量里
+					    //唯一要注意的是，随机选择的范围(1..101)包含1，但是不包含101
+					</pre>
+
+					<pre class="brush: c;">
+					//loop循环，进程执行程序遇到loop后，如果loop内部没有break跳出，将反复执行loop中的内容，直到被系统终止
+					loop {
+					        println!("Please input your guess.");
+
+					        //创建变量guess，mut关键词声明guess是一个“可变变量”，类型为String（字符串类型）
+					        let mut guess = String::new(); 
+
+					        //使用标准输入输io类的stdin方法中的read_line方法，读取一行用户的输入储存到guess变量中
+					        //对可变变量的存储，需要加上&ampmut这个关键词
+					        //如果读取报错，会执行expect函数的部分，输出"Failed to read line"到屏幕上
+					        //这三行可以写在一行上，如下所示，只是为了美观，分成三行来写
+					        //io::stdin().read_line(&mut guess).expect("Failed to read line");
+					        io::stdin()
+					        .read_line(&mut guess)
+					        .expect("Failed to read line");
+
+					        //使用match运算语法，将guess的值通过trim()方法去掉前后空格，再通过parse()方法转化成整数
+					        //将这个转化后的整数，存储成u32类型
+					        let guess: u32 = match guess.trim().parse() {
+					            Ok(num) => num,  //如果转化成功，返回用户输入的整数值
+					            Err(_) => continue, //如果没有转化成功，则跳转到loop起始位置，继续循环
+					        }; //Err(_) 中的下划线_是一个通配符，代表接收任何报错
+
+					        //输出用户猜测的数字
+					        println!("You guessed: {}", guess);
+
+					        //再次使用match语法，将guess变量与secret_number变量进行比较
+					        match guess.cmp(&secret_number) {
+					            Ordering::Less => println!("Too small!"), //guess比secret_number小
+					            Ordering::Greater => println!("Too big!"), //guess比secret_number大
+					            Ordering::Equal => {  //如果比较结果一样大
+					                println!("You win!"); 
+					                break;  //跳出循环
+					            }
+					        }
+					    }
+					</pre>
 					<!-- /正文 -->
-
-				<video src="video/test.mp4" controls="controls">该浏览器不支持h5的video标签</video>
 
 				<footer class="text-footer">
 					<p>
