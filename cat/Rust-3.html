@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-3-函数 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>		
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-3-函数</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust函数的创建，参数在函数之间的传递，函数返回值，提前跳出函数等。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-function-1">0×1.main主函数</a></li>
+						 <li><a href="#Rust-function-2">0×2.调用其他函数</a></li>
+						 <li><a href="#Rust-function-3">0×3.在函数中传递参数</a></li>
+						 <li><a href="#Rust-function-4">0×4.函数返回值</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-function-1">0×1.main主函数</h2>
+
+					<p>在Rust中，使用fn关键词来声明和定义一个函数，函数命名规范定义，函数名称中所有单词字母必须小写，并使用划线作为单词分隔符，与C语言一样，Rust也有一个唯一的程序入口，被称作主函数，名称为main，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//程序入口，系统在执行Rust时，总是先从main函数开始执行
+					fn main() {
+					    println!("Hello NikkoCat.com");
+					}
+					</pre>
+
+					<h2 id="Rust-function-2">0×2.调用其他函数</h2>
+
+					<p>通过main函数，调用其他函数：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    other_function();
+					}
+
+					fn other_function() {
+					    println!("Hello NikkoCat.com");
+					}
+
+					程序输出：
+					Hello NikkoCat.com
+					</pre>
+
+					<h2 id="Rust-function-3">0×3.在函数中传递参数</h2>
+
+					<p>请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+						//定义两个u32变量
+					    let x:u32=233;
+					    let y:u32=234;
+					    //将这两个变量传递给math_function函数
+					    math_function(x,y);
+					}
+
+					//括号中"(a:u32,b:u32)"代表这个函数可以接收两个u32类型的参数
+					fn math_function(a:u32,b:u32) {
+					    println!("Hello NikkoCat.com");
+					    println!("{}",a+b);  //将主函数传递过来的两个变量相加输出
+					}
+
+					程序输出：
+					Hello NikkoCat.com
+					467
+					</pre>
+
+					<h2 id="Rust-function-4">0×4.函数返回值</h2>
+
+					<p>请看下面的实例：</p>
+ 					<pre class="brush: c;">
+ 					fn main() {
+						//定义两个u32变量
+					    let x:u32=233;
+					    let y:u32=234;
+					    //调用函数将x，y变量传递给函数，然后用z来接收函数返回的值
+					    let z=math_function(x,y);
+					    println!("{}",z);
+					}
+
+					//"-> u32" 表示这个函数返回一个u32的值给调用者
+					fn math_function(a:u32,b:u32) -> u32 {
+					    println!("Hello NikkoCat.com");
+					    //在Rust中，如果没有提前使用return来返回
+					    //函数返回的值一般是函数最后一句表达式的值
+					    //并且这个表达式不需要使用分号作为结束
+					    a+b
+					}
+
+					程序输出：
+					Hello NikkoCat.com
+					467
+					</pre>
+
+					<p>提前使用return来返回值：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let list_1:[i32]=[1,2,3,4,5,6];
+					    let guess_1:i32=0;
+					    let guess_2:i32=6;
+					    //将列表以引用的方式传给find_value函数，再传入一个我们猜测的数字
+					    println!("There is 0 in the array?:{}",find_value(&list_1,guess_1));
+					    println!("There is 6 sin the array?:{}",find_value(&list_1,guess_2));
+					}
+
+					fn find_value(list_x:&[i32],guess_x:i32) -> bool {
+					    for i in list_x {
+					        if *i == guess_x { 
+					            return true;  //如果我们猜测的数字包含在列表中，则返回true
+					        }
+					    }
+					    false //如果我们猜测的数字没有在列表中找到，函数默认返回false
+					}
+					</pre>
+
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-3-函数" href="https://www.nikkocat.com/cat/Rust-3.html" target="_blank">https://www.nikkocat.com/cat/Rust-3.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
