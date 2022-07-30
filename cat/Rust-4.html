@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-3-流控制 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>		
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-3-流控制</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中的流控制，包含if...else判断以及loop、while 和for三种循环。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-Process-control-1">0×1.if流程控制与分支</a></li>
+						 <li><a href="#Rust-Process-control-2">0×2.loop循环</a></li>
+						 <li><a href="#Rust-Process-control-3">0×3.while循环</a></li>
+						 <li><a href="#Rust-Process-control-4">0×4.for循环</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-Process-control-1">0×1.if流程控制与分支</h2>
+
+					<p>下面实例是一个简单的if..else if..else分支模型：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let x:i8=5;
+					    if x<3 {
+					        println!("x<3");
+					    } else if x>8 {
+					        println!("x>8");
+					    } else if x==5 {
+					        println!("x = {}", x); 
+					    } else {
+					        println!("NikkoCat.com");
+					    }
+					}
+
+					程序输出：
+					x = 5
+					</pre>
+					<p>if..else流程控制的特点，当某个分支条件成立，执行那个分支下面的语句，并且不会再执行剩下的分支判断，如果没有分支条件匹配成功，则执行else下面的语句。</p>
+
+					<p>除了用作流程控制，if还能作为具有返回值的表达式使用，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let a:bool=true;
+					    //当a是true时，返回233给变量x
+					    //if作为具有返回值的表达式使用时，每个分支的返回值类型必须相同
+					    //就比如let x:i32=if a {233} else {"NikkoCat.com"}; 就会报错
+					    //因为第一个分支中返回的是一个整形，else中返回的是一个字符串
+					    let x:i32=if a {233} else {0};
+					    println!("{}", x);
+					}
+
+					程序输出：
+					233
+					</pre>
+
+					<h2 id="Rust-Process-control-2">0×2.loop循环</h2>
+
+					<p>一个loop无限循环的实例：</p>
+					<pre class="brush: c;">
+					use std::{thread, time};  //包含线程休眠定时器功能的类引用
+
+					fn main() {
+						//这个loop循环没有任何结束条件，将会一直循环下去
+						//为了让程序循环的慢一点，在loop中添加了线程休眠计时器
+					    loop {
+					        println!("Hello");
+					        //将线程休眠2秒（2000毫秒）
+					        thread::sleep(time::Duration::from_millis(2000));
+					        println!("NikkoCat.com");
+					        thread::sleep(time::Duration::from_millis(2000));
+					    }
+					}
+
+					程序输出：
+					Hello
+					NikkoCat.com
+					Hello
+					NikkoCat.com
+					Hello
+					NikkoCat.com
+					Hello
+					......
+					</pre>
+
+					<p>loop循环标签与break：</p>
+					<p>loop循环本身是一个死循环，如果想要提前终止，跳出循环，可以通过break关键词来实现，请看下面的实例；</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let mut x:i8=6;
+					    let mut y:i8=3;
+					    //循环标签语法：'标签名称
+					    //给循环命名之后，就可以使用[break '标签名称]，这种方式，来指定跳出哪一个循环
+					    'top_loop: loop { 
+					        loop {
+					            if x==0 {
+					                x=6;
+					                break;  //仅跳出当前子循环
+					            }
+					            if y==0 {
+					                break 'top_loop;  //如果y=0，跳出'top_loop循环
+					            }
+					            x-=1;
+					            println!("x={},y={}", x, y);
+					        }
+					        y-=1;
+					    }
+					}
+
+					程序输出：
+					x=5,y=3
+					x=4,y=3
+					x=3,y=3
+					x=2,y=3
+					x=1,y=3
+					x=0,y=3
+					x=5,y=2
+					x=4,y=2
+					x=3,y=2
+					x=2,y=2
+					x=1,y=2
+					x=0,y=2
+					x=5,y=1
+					x=4,y=1
+					x=3,y=1
+					x=2,y=1
+					x=1,y=1
+					x=0,y=1
+					</pre>
+
+					<p>从loop循环返回值：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let mut x:i8=0;
+					    let y:i8='a_loop: loop {
+					        if x==10 {
+					        //将需要返回的值放在break后面即可
+					        //当x等于10的时候，跳出名称为'a_loop的循环
+					        //并且返回10*x的值
+					            break 'a_loop 10*x;  
+					        }
+					        x += 1;
+					    };
+					    println!("y = {}", y);
+					}
+
+					程序输出：
+					100
+					</pre>
+
+					<h2 id="Rust-Process-control-3">0×3.while循环</h2>
+
+					<p>while循环，当条件为真，执行循环，当条件不再为真，自动调用 break 停止循环，请看下面的实例： </p>
+					<pre class="brush: c;">
+					fn main() {
+					    let mut x:i8=0;
+					    while x<6 { //当x小于6时，循环
+					        println!("{}", x);
+					        x+=1;
+					    }
+					}
+
+					程序输出：
+					0
+					1
+					2
+					3
+					4
+					5
+					</pre>
+
+					<h2 id="Rust-Process-control-4">0×4.for循环</h2>
+
+					<p>for循环实例：</p>
+ 					<pre class="brush: c;">
+ 					//通过for循环遍历列表
+ 					fn main() {
+					    let list_1 =["a", "b", "c", "d", "e"];
+					    for i in list_1 {
+					        println!("{}", i);
+					    }
+					}
+
+					程序输出：
+					a
+					b
+					c
+					d
+					e
+					</pre>
+
+					<pre class="brush: c;">
+					//0..=5代表从0到5
+					fn main() {
+					    for a in 0..=5 {
+					        println!("{}", a);
+					    }
+
+					    //0..5代表从0到4（不包含5）
+					    //rev()函数将结果倒序输出，即从4到0
+					    for b in (0..5).rev() {
+					        println!("{}", b);
+					    }
+					}
+
+					程序输出：
+					0
+					1
+					2
+					3
+					4
+					5
+					4
+					3
+					2
+					1
+					0
+					</pre>
+
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-4-流控制" href="https://www.nikkocat.com/cat/Rust-4.html" target="_blank">https://www.nikkocat.com/cat/Rust-4.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
