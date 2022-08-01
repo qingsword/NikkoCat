@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-7-字符串slice - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>		
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-7-字符串slice</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中字符串切片功能slice。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-slice-1">0×1.字符串切片功能slice</a></li>
+						 <li><a href="#Rust-slice-2">0×2.使用slice功能实现读取单词操作</a></li>
+						 
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-slice-1">0×1.字符串切片功能slice</h2>
+
+					<p>Rust的slice功能，能够实现对字符串中指定范围值的引用，使用slice功能的语法是"&amp;要slice引用的变量名[起始index..结束index+1]"，在诸多语言中取值范围类似[1..5]、[1,5]这种形式，大多数情况下都只包含前标，不包含后标，也就是只包含1，不包含5，所以当一个字符串是"NikkoCat"的时候，如果我们想取出Nikko，范围就应该是[0,5]，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    let s = String::from("hello world");
+					    //world变量是s的一个slice引用
+					    //读取s变量值从索引6到10
+					    //取出"hello world"中的"world"  
+					    let world=&s[6..11];
+					    println!("{}",world);
+					}
+					</pre>
+					<p>上面的这段程序，slice引用在内存中的表现大致如下图所示，world变量只是在栈上储存了指向w的指针以及长度信息：</p>
+					<img src="images/Rust-slice-1.png" alt="images/Rust-slice-1.png">
+
+					<p>除此之外，slice语法中的前后标能够省略；省略前标，代表从0开始；省略后标，代表取到字符串末尾，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let mut s1=String::from("NikkoCat.com");
+					    let s2=&s1[..8]; //等同于[0..8]
+					    let s3=&s1[8..]; //等同于[8..12]
+					    println!("{}", s2);
+					    println!("{}", s3);
+					}
+
+					程序输出：
+					NikkoCat
+					.com
+					</pre>
+
+					<p>如果需要取整个字符串，可以使用下面两种形式：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="NikkoCat.com";
+					    let s2=&s1[..];  //省略前后标，相当于取整个字符串
+					    let s3=&s1[..s1.len()]; //从0取到s1.len()
+					    println!("{}", s2);
+					    println!("{}", s3);
+					}
+
+					程序输出：
+					NikkoCat.com
+					NikkoCat.com
+					</pre>
+
+					<p>当一个字符串被slice引用时，在引用变量离开作用域之前，不能修改被引用的变量，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//这段程序无法被编译
+					fn main() {
+					    let mut s1=String::from("NikkoCat");
+					    let s2=&s1[0..5];
+					    let s3=&s1[5..];
+					    //我们尝试在s2和s3还未被使用之前，修改s1的值
+					    //这会引发一个bug
+					    //如果能够修改成功，s2和s3的指针就会指向一个错误的位置，编译器不会允许这样做
+					    s1.push_str(".com");   
+					    println!("{}{}", s2, s3);
+					    println!("{}", s1);
+					}
+
+					//必须在修改被引用的变量之前，先使用slice引用变量，这样编译器会根据上下文，在slice引用变量使用后释放
+					fn main() {
+					    let mut s1=String::from("NikkoCat");
+					    let s2=&s1[0..5];
+					    let s3=&s1[5..]; 
+					    println!("{}{}", s2, s3); //s2和s3在这里离开作用域
+
+					    s1.push_str(".com");  //再去修改s1，是被允许的
+					    println!("{}", s1);
+					}
+					</pre>
+
+					<h2 id="Rust-slice-2">0×2.使用slice功能实现读取单词操作</h2>
+
+					<p></p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1:&str="Welcome to my website NikkoCat.com";
+					    //将s1用引用方式传递给slice_s1函数
+					    slice_s1(&s1);  
+					    println!("{}", s1);
+					}
+
+					fn slice_s1(s:&str) {
+						//为了能够使用字符串切片功能，需要将s先转化成字节数组
+					    let bt=s.as_bytes();
+					    //创建一个计数器
+					    let mut _i:usize=0;
+
+					    //bt.iter()函数可以返回字节数组中的每个元素
+					    //.enumerate()函数，能够返回一个包含(索引,元素)的元组
+					    //所以我们可以用两个变量来分别接收这个元组中的数据
+					    //第一个变量接收索引值，第二个变量接收元素
+					    for (_inum,_item) in bt.iter().enumerate() {
+					    	//如果元素值为空格，因为_item是&u8类型，所以这里b' '前面要加&
+					       if _item==&b' ' {
+					       	//利用切片功能，打印出s中对应的单词
+					        println!("slice: {}", &s[_i.._inum]);
+					        //将计数器往后加1，指向单词的第一个字母
+					        _i=_inum+1; 
+					       }
+					    }
+					    //打印最后一个单词
+					    println!("slice: {}", &s[_i..]);
+					}
+
+					程序输出：
+					slice: Welcome
+					slice: to
+					slice: my
+					slice: website
+					slice: NikkoCat.com
+					Welcome to my website NikkoCat.com
+					</pre>
+					
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-7-字符串slice" href="https://www.nikkocat.com/cat/Rust-7.html" target="_blank">https://www.nikkocat.com/cat/Rust-7.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
