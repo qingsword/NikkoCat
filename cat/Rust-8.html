@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-8-结构 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>		
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-8-结构</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中的结构语法。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-struct-1">0×1.定义结构体</a></li>
+						 <li><a href="#Rust-struct-2">0×2.元组结构体</a></li>
+						 <li><a href="#Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-struct-1">0×1.定义结构体</h2>
+
+					<p>自定义结构体，可以使用struct关键字并为整个结构体提供一个名字，接着，在大括号中，定义每一部分数据的名字和类型，称之为字段（field），请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					     //定义一个结构和里面的字段，j结构名称为"Account"
+					    struct Account {  
+					        account_name:String,
+					        email:String,
+					        active:bool,
+					        sign_in_count:u64,
+					    }
+					}
+					</pre>
+
+					<p>使用结构：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    struct Account {
+					        account_name:String,
+					        email:String,
+					        active:bool,
+					        sign_in_count:u64,
+					    }
+
+					    //定义一个结构变量，填入结构字段的值
+					    let user_1=Account {
+					        account_name:"NikkoCat.com".to_string(),
+					        email: "admin@NikkoCat.com".to_string(),
+					        active:true,
+					        sign_in_count:1,
+					    };
+
+					    println!("user_name={}",user_1.account_name);
+					    println!("user_email={}",user_1.email);
+					}
+
+					程序输出：
+					user_name=NikkoCat.com
+					user_email=admin@NikkoCat.com
+					</pre>			
+
+					<p>如果需要修改结构字段的值：</p>		
+					<pre class="brush: c;">
+					fn main() {
+					    struct Account {
+					        account_name:String,
+					        email:String,
+					        active:bool,
+					        sign_in_count:u64,
+					    }
+					    //在声明结构变量时加上mut，就能在后面修改对应字段的值
+					    let mut user_1=Account {
+					        account_name:"NikkoCat.com".to_string(),
+					        email: "admin@NikkoCat.com".to_string(),
+					        active:true,
+					        sign_in_count:1,
+					    };
+
+					    //修改用户名
+					    user_1.account_name = "www.NikkoCat.com".to_string();
+					    
+					    println!("user_name={}",user_1.account_name);
+					    println!("user_email={}",user_1.email);
+					}
+
+					程序输出：
+					user_name=www.NikkoCat.com
+					user_email=admin@NikkoCat.com					
+					</pre>
+
+					<p>使用函数方式构造一个创建账户的API：</p>
+					<pre class="brush: c;">
+					//全局结构，便于函数调用
+					struct Account {
+					    account_name:String,
+					    email:String,
+					    active:bool,
+					    sign_in_count:u64,
+					}
+
+					fn main() {
+						//使用creat_account函数创建一个结构变量
+					    let user1:Account = creat_account("Nikkocat.com".to_string(),"admin@NikkoCat.com".to_string());
+					    
+					    println!("user_name={}", user1.account_name);
+					    println!("email={}", user1.email);
+
+					}
+
+					//用于创建用户数据的接口函数，返回Account结构
+					fn creat_account(user_name:String,email:String) -> Account {
+					    Account {
+					        account_name:user_name,
+					        //当传入的参数与结构字段同名时，可以简写成这样，等价于email:email
+					        email,  
+					        active:true,
+					        sign_in_count:0,
+					    }
+					}
+
+					程序输出：
+					user_name=Nikkocat.com
+					email=admin@NikkoCat.com
+					</pre>
+
+					<p>通过拷贝来创建新结构：</p>	
+					<pre class="brush: c;">
+					struct Account {
+					    account_name:String,
+					    email:String,
+					    active:bool,
+					    sign_in_count:u64,
+					}
+
+					fn main() {
+
+					    let user1=Account{
+					        account_name:"NikkoCat.com".to_string(),
+					        email: "admin@NikkoCat.com".to_string(),
+					        active:true,
+					        sign_in_count:1,
+					    };
+
+					    let user2=Account{
+					        account_name:"www.NikkoCat.com".to_string(),
+					        email: "boss@NikkoCat.com".to_string(),
+					        ..user1  //拷贝user1剩下来的内容给user2
+					        //..user1 必须放在最后
+					    };
+
+					    println!("{}",user1.account_name);
+					    println!("{}",user2.account_name);
+					    println!("{}",user2.active);
+
+					}
+					</pre>	
+
+					<p>拷贝过程中所有权的问题：</p>		
+					<pre class="brush: c;">
+					struct Account {
+					    account_name:String,
+					    email:String,
+					    active:bool,
+					    sign_in_count:u64,
+					}
+
+					fn main() {
+
+					    let mut user1=Account{
+					        account_name:"NikkoCat.com".to_string(),
+					        email: "admin@NikkoCat.com".to_string(),
+					        active:true,
+					        sign_in_count:1,
+					    };
+					    
+					    let user2=Account{
+					        account_name:"www.NikkoCat.com".to_string(),
+					        ..user1 //email数据也被移动到user2中
+					    }; 
+					    
+					    //这里存在一个问题，根据Rust变量移动和所有权的概念
+					    //当user2声明之后，因为user1的email是存储在堆上的
+					    //所以user2声明之后，user1的email字段数据会被移动到user2中
+					    //但是如果在后面的代码中，尝试修改user1的email字段的值
+					    //编译器就会对user1的email字段，创建一个堆拷贝，拷贝给user2
+					    //从而让user1仍然有效
+					    user1.email = "admin@NikkoCat.com".to_string();
+					    println!("{}",user1.email);
+
+					    //但如果上面的两句println!函数在前，如下
+						//程序会编译失败
+						//这个顺序上的差异，会让编译器将user1判断为已经移动给user2
+					    println!("{}",user1.email);  //这里会报错
+					    user1.email = "admin@NikkoCat.com".to_string();
+					}
+					</pre>
+					<p>所以，对于两个结构体user1和user2，如果user2只是复制了user1在堆上的数据（bool和整形），那么user1仍然有效，如果user2复制了user1堆上的数据（可变字符串等），就要看在此之后和user1有关的第一句语法，是否是修改user1堆上的值的操作，如果有，user1仍然有效，如果在此之后和user1有关的第一句语法是读取操作，那么编译器会判定user1被移动。</p>										
+
+					<h2 id="Rust-struct-2">0×2.元组结构体</h2>
+
+					<p>元组结构体实例类似于元组：可以将其解构为单独的部分，也可以使用符号''点''后跟索引来访问单独的值，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    struct color(i32,i32,i32);
+					    struct info(String,String);
+
+					    let black=color(0,0,0);
+					    let user1=info("NikkoCat.com".to_string(),"admin@NikkoCat.com".to_string());
+
+					    //单独访问元组结构体中的每个元素
+					    println!("The color: {}{}{}", black.0,black.1,black.2);
+					    println!("user_name:{}\nuser_email:{}", user1.0,user1.1);
+					}
+
+					程序输出：
+					The color: 000
+					user_name:NikkoCat.com
+					user_email:admin@NikkoCat.com
+					</pre>
+
+					<p>下面实例定义了一个没有任何字段的结构体，它们被称为“类单元结构体”：</p>
+					<pre class="brush: c;">
+					//这种结构体的用法，要在本系列后面的文章中才能用得到，这里只需要知道，可以这样定义就行
+					fn main() {
+					    struct nikkocat;
+					    let user1=nikkocat;
+					}
+					</pre>
+
+					<h2 id="Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</h2>
+
+					<p></p>
+
+					<pre class="brush: c;">
+					
+					</pre>
+					
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-8-结构" href="https://www.nikkocat.com/cat/Rust-8.html" target="_blank">https://www.nikkocat.com/cat/Rust-8.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
