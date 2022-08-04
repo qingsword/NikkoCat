@@ -290,14 +290,141 @@
 					}
 					</pre>
 
+					<p>我们来看一个长方形面积计算的三种不同实现方式：</p>
+					<pre class="brush: c;">
+					//方法一：
+					fn main() {
+					    let width:i32=10;
+					    let height:i32=5;
+					    println!("Area={}",area(width,height));
+					}
+
+					fn area(w:i32, h:i32) -> i32 {
+					    w*h
+					}
+
+					//方法二：使用元组
+					fn main() {
+					    let wh:(i32,i32)=(5,10);
+					    println!("Area={}",area(&wh));
+					}
+
+					fn area(w_h:&(i32,i32)) -> i32 {
+					    w_h.0*w_h.1
+					}
+
+					//方法三：使用结构
+					struct Rec {
+					    width:i32,
+					    height:i32,
+					}
+
+					fn main() {
+
+					    let area_rec=Rec {
+					        width:6,
+					        height:8,
+					    };
+
+					    println!("Area={}",area(&area_rec));
+					}
+
+					fn area(x:&Rec) -> i32 {
+					    x.width*x.height
+					}
+					</pre>
+
+
 					<h2 id="Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</h2>
 
-					<p></p>
+					<p>首先我们尝试使用println!来打印结构体，看看会发生什么：</p>
 
 					<pre class="brush: c;">
-					
+					struct Rec {
+					    width:i32,
+					    height:i32,
+					}
+
+					fn main() {
+
+					    let area_rec=Rec {
+					        width:6,
+					        height:8,
+					    };
+
+					    println!("Area={}",area_rec);
+					}
+
+					//编译器给出一个错误：
+					//`Rec` cannot be formatted with the default formatter
+					// println!宏能够处理很多格式，{}告诉编译器，使用display来展示数据
+					//大部分简单的类型都实现了display方法，但是struct没有实现这个方法
+
+					//同样也给出了一个解决方案，打印这数据类型时，可以使用{:?}或者 {:#?}：
+					//note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+
+					//我们尝试着按照编辑器给出的解决方法，将
+					println!("Area={}",area_rec);
+					//替换成
+					println!("Area={:?}",area_rec);
+
+					//再次编译时，又遇到了错误，提示不能使用`{:?}`来格式化输出Rec变量内容
+					`Rec` cannot be formatted using `{:?}`
+					//编译器再次给出提示，让我们尝试在结构语句前面，添加上#[derive(Debug)]：
+					 note: add `#[derive(Debug)]` to `Rec` or manually `impl Debug for Rec`
+
+					 //{:?}或{:#?}语法告诉println!宏打印调试消息，但是我们需要在被调试的结构前面添加#[derive(Debug)]才能实现这个功能，最后代码如下：
+					 #[derive(Debug)]
+					struct Rec {
+					    width:i32,
+					    height:i32,
+					}
+
+					fn main() {
+
+					    let area_rec=Rec {
+					        width:6,
+					        height:8,
+					    };
+					    //{:#?}的显示比{:?}更加的“可视化”
+					    println!("Area={:#?}",area_rec);
+					}
+
+					程序输出：
+					Area=Rec {
+					    width: 6,
+					    height: 8,
+					}
 					</pre>
-					
+
+					<p>使用Debug格式打印数值的方法，除了println!宏外，我们还可以使用dbg!宏来实现，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					#[derive(Debug)]
+					struct Rec {
+					    width:i32,
+					    height:i32,
+					}
+					//dbg! 宏接收一个表达式的所有权，打印出代码中调用 dbg! 宏时所在的文件和行号，以及该表达式的结果值，并返回该值的所有权
+					fn main() {
+					    let x:i32=3;
+					    let area_rec=Rec {
+					        width:dbg!(x*6),  //dbg!接收x
+					        height:8,
+					    };
+					    //如果不想dbg!获取所有权，可以使用引用
+					    dbg!(&area_rec); 
+					}
+
+					程序输出：
+					[...test.rs:10] x * 6 = 18
+					[.../test.rs:14] area_rec = Rec {
+					    width: 18,
+					    height: 8,
+					}
+					</pre>
+					<p>println!与dbg!不同之处在于，dbg!宏会打印到标准错误控制台流（stderr）， println!会打印到标准输出控制台流（stdout）；当你试图弄清楚你的代码在做什么，这两种调试方式会非常有帮助。</p>
+
 					<!-- /正文 -->
 
 				<footer class="text-footer">
