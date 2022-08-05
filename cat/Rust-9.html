@@ -8,7 +8,7 @@
 	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
 	<meta name="author" content="NikkoCat.COM">
 	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
-	<title>Rust-8-结构 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<title>Rust-9- - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -63,37 +63,27 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>Rust-8-结构</h1>	
+					<h1>Rust-9-方法</h1>	
 				</header><!-- /header -->
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章介绍Rust中的结构语法与简单的Debug方法。</p>
+					<p>这篇文章介绍Rust中的结构语法。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
 						 <li><a href="#Rust-struct-1">0×1.定义结构体</a></li>
 						 <li><a href="#Rust-struct-2">0×2.元组结构体</a></li>
 						 <li><a href="#Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</a></li>
-						 <li><a href="#Rust-struct-4">0×4.结构体中定义方法</a></li>
-						 <li><a href="#Rust-struct-5">0×5.结构体中定义关联函数</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
 					<h2 id="Rust-struct-1">0×1.定义结构体</h2>
 
-					<p>自定义结构体，可以使用struct关键字并为整个结构体提供一个名字，接着，在大括号中，定义每一部分数据的名字和类型，称之为字段（field），请看下面的实例：</p>
+					<p></p>
 
 					<pre class="brush: c;">
-					fn main() {
-					     //定义一个结构和里面的字段，j结构名称为"Account"
-					    struct Account {  
-					        account_name:String,
-					        email:String,
-					        active:bool,
-					        sign_in_count:u64,
-					    }
-					}
+
 					</pre>
 
 					<p>使用结构：</p>
@@ -427,174 +417,13 @@
 					</pre>
 					<p>println!与dbg!不同之处在于，dbg!宏会打印到标准错误控制台流（stderr）， println!会打印到标准输出控制台流（stdout）；当你试图弄清楚你的代码在做什么，这两种调试方式会非常有帮助。</p>
 
-					<h2 id="Rust-struct-4">0×4.结构体中的方法</h2>
-					<p>可以使用impl关键字给结构体创建“方法”，请看下面的实例：</p>
-					<pre class="brush: c;">
-					//定义了一个叫做Rec的结构
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					//impl后面跟结构名称，这会告诉解释器，这一段下面所有的方法，都是提供给Rec这个结构使用的
-					impl Rec {
-						//结构体里面的方法第一个参数永远都是self，代表结构实例本身
-						//加上&符号，表示引用结构实例本身，而不是获得所有权
-					    fn area(&self) -> i32 {
-					        self.width * self.height
-					    }
-
-					    //当需要传入更多的参数时，可以将参数写在self后面
-					    fn x(&self,i:i32) -> i32 {
-					        self.width * self.height * i
-					    }
-					    
-					    fn width(&self) -> i32 {
-					        self.width
-					    }
-
-					    fn height(&self) -> i32 {
-					        self.height
-					    }
-					}
-
-					fn main() {
-						//创建结构实例
-					    let area_rec=Rec {
-					        width:6,
-					        height:8,
-					    };
-
-					    //利用结构实例中的方法，输出长宽以及面积
-					    println!("width={},height={},area={}",
-					    area_rec.width,area_rec.height,area_rec.area());
-
-					    //传入参数给结构实例中的x方法
-					    let imun=5;
-					    println!("area*imun={}", area_rec.x(imun));
-					}
-
-					程序输出：
-					width=6,height=8,area=48
-					area*imun=240
-					</pre>
-
-					<p>下面是一个通过结构体中的方法来比较不同结构数据的实例：</p>
-					<pre class="brush: c;">
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					impl Rec { 
-						//计算面积
-					    fn area(&self) -> i32 { self.width * self.height }
-
-					    //比较调用这个方法的结构实例，与传入的结构实例的面积大小
-					    fn compare_area(&self,other:&Rec) -> bool {
-					        self.width*self.height > other.width*other.height
-					    }
-					}
-
-					fn main() {
-						//创建两个结构实例
-					    let area_rec_1=Rec {
-					        width:6,
-					        height:8,
-					    };
-					    let area_rec_2=Rec {
-					        width:7,
-					        height:5,        
-					    };
-
-					    //利用结构方法area，分别输出两个结构实例的面积
-					    println!("area_rec_1 area={}",area_rec_1.area()); 
-					    println!("area_rec_2 area={}",area_rec_2.area());   
-
-					    //利用结构方法compare_area，比较两个结构实例的面积大小
-					    println!("Does area_rec_1 have a larger area than area_rec_2?{}",
-					    area_rec_1.compare_area(&area_rec_2));
-					}
-
-					程序输出：
-					area_rec_1 area=48
-					area_rec_2 area=35
-					Does area_rec_1 have a larger area than area_rec_2?true
-					</pre>
-
-					<h2 id="Rust-struct-5">0×5.结构体中定义关联函数</h2>
-
-					<p>所有在 impl 块中定义的不包含self的函数都被称为 关联函数（associated functions），关联函数与方法不同，方法是通过“实例名称.方法函数”来访问，关联函数是通过“实例名称::函数名称”的形式来访问，这个函数位于结构体的命名空间中，请看下面的实例：</p>
-
-					<pre class="brush: c;">
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					impl Rec { 
-						//在结构体的命名空间中创建关联函数
-					    fn create_square(x:i32) -> Rec {
-					        Rec { width: x, height: x, }
-					    }
-					    fn area(&self) -> i32 { self.width * self.height }
-
-					}
-
-					fn main() {
-						//调用关联函数，传入参数
-					    let sq:Rec=Rec::create_square(2);
-					    println!("width={},height={}",sq.width,sq.height);
-					}
-
-					程序输出：
-					width=2,height=2
-					</pre>
-
-					<p>除此之外，Rust允许将同一个结构的不同方法放到不同的impl代码块中，并不会影响方法的调用，请看下面的实例：</p>
-					<pre class="brush: c;">		
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					impl Rec { 
-					    fn create_square(x:i32) -> Rec {
-					        Rec { width: x, height: x, }
-					    }
-					    fn area(&self) -> i32 { self.width * self.height }
-					}
-
-					//Rust允许将同一个对象的不同的方法和关联函数，分别放在了多个impl块中
-					impl Rec {
-					    fn compare_area(&self,other:&Rec) -> bool {
-					        self.width*self.height > other.width*other.height
-					    }
-					}
-
-					fn main() {
-					    let sq_1:Rec=Rec::create_square(2);
-					    let sq_2:Rec = Rec::create_square(4);
-					    println!("sq_1 width={},height={}",sq_1.width,sq_1.height);
-					    println!("sq_2 width={},height={}",sq_2.width,sq_2.height);
-					    println!("Does sq_1 have a larger area than sq_2?{}",
-						sq_1.compare_area(&sq_2));
-					}
-
-					程序输出：
-					sq_1 width=2,height=2
-					sq_2 width=4,height=4
-					Does sq_1 have a larger area than sq_2?false
-					</pre>
-
-
 					<!-- /正文 -->
 
 				<footer class="text-footer">
 					<p>
 						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
 					</p>
-					<p>*原文连接:<a title="Rust-8-结构" href="https://www.nikkocat.com/cat/Rust-8.html" target="_blank">https://www.nikkocat.com/cat/Rust-8.html</a></p>
+					<p>*原文连接:<a title="Rust-9-方法" href="https://www.nikkocat.com/cat/Rust-9.html" target="_blank">https://www.nikkocat.com/cat/Rust-9.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	

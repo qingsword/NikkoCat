@@ -31,7 +31,7 @@ SyntaxHighlighter.brushes.Cpp = function()
 {
 	// Copyright 2006 Shin, YoungJin
 	
-	var datatypes =	'ATOM BOOL BOOLEAN BYTE CHAR COLORREF DWORD DWORDLONG DWORD_PTR ' +
+	var datatypes =	'String i32 u32 i8 i16 i64 u8 u16 u32 u64 usize isize ATOM BOOL BOOLEAN BYTE CHAR COLORREF DWORD DWORDLONG DWORD_PTR ' +
 					'DWORD32 DWORD64 FLOAT HACCEL HALF_PTR HANDLE HBITMAP HBRUSH ' +
 					'HCOLORSPACE HCONV HCONVLIST HCURSOR HDC HDDEDATA HDESK HDROP HDWP ' +
 					'HENHMETAFILE HFILE HFONT HGDIOBJ HGLOBAL HHOOK HICON HINSTANCE HKEY ' +
@@ -56,7 +56,7 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'time_t __time64_t _timeb __timeb64 tm uintptr_t _utimbuf ' +
 					'va_list wchar_t wctrans_t wctype_t wint_t signed';
 
-	var keywords =	'as break const continue crate else enum extern false fn for if impl in let loop match mod move mut pub ref return Self self static struct super trait true type unsafe use where while union break case catch class const __finally __exception __try ' +
+	var keywords =	' impl struct as break const continue crate else enum extern false fn for if impl in let loop match mod move mut pub ref return Self self static struct super trait true type unsafe use where while union break case catch class const __finally __exception __try ' +
 					'const_cast continue private public protected __declspec ' +
 					'default delete deprecated dllexport dllimport do dynamic_cast ' +
 					'else enum explicit extern if for friend goto inline ' +
@@ -66,7 +66,9 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'thread throw true false try typedef typeid typename union ' +
 					'using uuid virtual void volatile whcar_t while';
 					
-	var functions =	'Err Ok cmp read_line expect stdin new trim parse main println assert isalnum isalpha iscntrl isdigit isgraph islower isprint' +
+	var functions =	'push_str push len from iter enumerate to_string Err Ok cmp ' +
+					'read_line expect stdin new trim parse main println assert isalnum ' +
+					'as_bytes isalpha iscntrl isdigit isgraph islower isprint ' +
 					'ispunct isspace isupper isxdigit tolower toupper errno localeconv ' +
 					'setlocale acos asin atan atan2 ceil cos cosh exp fabs floor fmod ' +
 					'frexp ldexp log log10 modf pow sin sinh sqrt tan tanh jmp_buf ' +
