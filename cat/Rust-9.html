@@ -8,7 +8,7 @@
 	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
 	<meta name="author" content="NikkoCat.COM">
 	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
-	<title>Rust-9- - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<title>Rust-9-枚举 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -53,7 +53,7 @@
 						</li>
 					</ul>
 				</nav>
-			</div>		
+			</div>	
 	</header>
 	<!-- /header -->
 
@@ -63,359 +63,287 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>Rust-9-方法</h1>	
+					<h1>Rust-9-枚举</h1>	
 				</header><!-- /header -->
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章介绍Rust中的结构语法。</p>
+					<p>这篇文章介绍Rust中的枚举与match模式匹配。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#Rust-struct-1">0×1.定义结构体</a></li>
-						 <li><a href="#Rust-struct-2">0×2.元组结构体</a></li>
-						 <li><a href="#Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</a></li>
+						 <li><a href="#Rust-enum-1">0×1.如何定义枚举</a></li>
+						 <li><a href="#Rust-enum-2">0×2.使用match读取枚举值</a></li>
+						 <li><a href="#Rust-enum-3">0×3.使用if let读取枚举值</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="Rust-struct-1">0×1.定义结构体</h2>
+					<h2 id="Rust-enum-1">0×1.如何定义枚举</h2>
 
-					<p></p>
-
-					<pre class="brush: c;">
-
-					</pre>
-
-					<p>使用结构：</p>
-					<pre class="brush: c;">
-					fn main() {
-					    struct Account {
-					        account_name:String,
-					        email:String,
-					        active:bool,
-					        sign_in_count:u64,
-					    }
-
-					    //定义一个结构变量，填入结构字段的值
-					    let user_1=Account {
-					        account_name:"NikkoCat.com".to_string(),
-					        email: "admin@NikkoCat.com".to_string(),
-					        active:true,
-					        sign_in_count:1,
-					    };
-
-					    println!("user_name={}",user_1.account_name);
-					    println!("user_email={}",user_1.email);
-					}
-
-					程序输出：
-					user_name=NikkoCat.com
-					user_email=admin@NikkoCat.com
-					</pre>			
-
-					<p>如果需要修改结构字段的值：</p>		
-					<pre class="brush: c;">
-					fn main() {
-					    struct Account {
-					        account_name:String,
-					        email:String,
-					        active:bool,
-					        sign_in_count:u64,
-					    }
-					    //在声明结构变量时加上mut，就能在后面修改对应字段的值
-					    let mut user_1=Account {
-					        account_name:"NikkoCat.com".to_string(),
-					        email: "admin@NikkoCat.com".to_string(),
-					        active:true,
-					        sign_in_count:1,
-					    };
-
-					    //修改用户名
-					    user_1.account_name = "www.NikkoCat.com".to_string();
-					    
-					    println!("user_name={}",user_1.account_name);
-					    println!("user_email={}",user_1.email);
-					}
-
-					程序输出：
-					user_name=www.NikkoCat.com
-					user_email=admin@NikkoCat.com					
-					</pre>
-
-					<p>使用函数方式构造一个创建账户的API：</p>
-					<pre class="brush: c;">
-					//全局结构，便于函数调用
-					struct Account {
-					    account_name:String,
-					    email:String,
-					    active:bool,
-					    sign_in_count:u64,
-					}
-
-					fn main() {
-						//使用creat_account函数创建一个结构变量
-					    let user1:Account = creat_account("Nikkocat.com".to_string(),"admin@NikkoCat.com".to_string());
-					    
-					    println!("user_name={}", user1.account_name);
-					    println!("email={}", user1.email);
-
-					}
-
-					//用于创建用户数据的接口函数，返回Account结构
-					fn creat_account(user_name:String,email:String) -> Account {
-					    Account {
-					        account_name:user_name,
-					        //当传入的参数与结构字段同名时，可以简写成这样，等价于email:email
-					        email,  
-					        active:true,
-					        sign_in_count:0,
-					    }
-					}
-
-					程序输出：
-					user_name=Nikkocat.com
-					email=admin@NikkoCat.com
-					</pre>
-
-					<p>通过拷贝来创建新结构：</p>	
-					<pre class="brush: c;">
-					struct Account {
-					    account_name:String,
-					    email:String,
-					    active:bool,
-					    sign_in_count:u64,
-					}
-
-					fn main() {
-
-					    let user1=Account{
-					        account_name:"NikkoCat.com".to_string(),
-					        email: "admin@NikkoCat.com".to_string(),
-					        active:true,
-					        sign_in_count:1,
-					    };
-
-					    let user2=Account{
-					        account_name:"www.NikkoCat.com".to_string(),
-					        email: "boss@NikkoCat.com".to_string(),
-					        ..user1  //拷贝user1剩下来的内容给user2
-					        //..user1 必须放在最后
-					    };
-
-					    println!("{}",user1.account_name);
-					    println!("{}",user2.account_name);
-					    println!("{}",user2.active);
-
-					}
-					</pre>	
-
-					<p>拷贝过程中所有权的问题：</p>		
-					<pre class="brush: c;">
-					struct Account {
-					    account_name:String,
-					    email:String,
-					    active:bool,
-					    sign_in_count:u64,
-					}
-
-					fn main() {
-
-					    let mut user1=Account{
-					        account_name:"NikkoCat.com".to_string(),
-					        email: "admin@NikkoCat.com".to_string(),
-					        active:true,
-					        sign_in_count:1,
-					    };
-					    
-					    let user2=Account{
-					        account_name:"www.NikkoCat.com".to_string(),
-					        ..user1 //email数据也被移动到user2中
-					    }; 
-					    
-					    //这里存在一个问题，根据Rust变量移动和所有权的概念
-					    //当user2声明之后，因为user1的email是存储在堆上的
-					    //所以user2声明之后，user1的email字段数据会被移动到user2中
-					    //但是如果在后面的代码中，尝试修改user1的email字段的值
-					    //编译器就会对user1的email字段，创建一个堆拷贝，拷贝给user2
-					    //从而让user1仍然有效
-					    user1.email = "admin@NikkoCat.com".to_string();
-					    println!("{}",user1.email);
-
-					    //但如果上面的两句println!函数在前，如下
-						//程序会编译失败
-						//这个顺序上的差异，会让编译器将user1判断为已经移动给user2
-					    println!("{}",user1.email);  //这里会报错
-					    user1.email = "admin@NikkoCat.com".to_string();
-					}
-					</pre>
-					<p>所以，对于两个结构体user1和user2，如果user2只是复制了user1在堆上的数据（bool和整形），那么user1仍然有效，如果user2复制了user1堆上的数据（可变字符串等），就要看在此之后和user1有关的第一句语法，是否是修改user1堆上的值的操作，如果有，user1仍然有效，如果在此之后和user1有关的第一句语法是读取操作，那么编译器会判定user1被移动。</p>										
-
-					<h2 id="Rust-struct-2">0×2.元组结构体</h2>
-
-					<p>元组结构体实例类似于元组：可以将其解构为单独的部分，也可以使用符号''点''后跟索引来访问单独的值，请看下面的实例：</p>
-
-					<pre class="brush: c;">
-					fn main() {
-					    struct color(i32,i32,i32);
-					    struct info(String,String);
-
-					    let black=color(0,0,0);
-					    let user1=info("NikkoCat.com".to_string(),"admin@NikkoCat.com".to_string());
-
-					    //单独访问元组结构体中的每个元素
-					    println!("The color: {}{}{}", black.0,black.1,black.2);
-					    println!("user_name:{}\nuser_email:{}", user1.0,user1.1);
-					}
-
-					程序输出：
-					The color: 000
-					user_name:NikkoCat.com
-					user_email:admin@NikkoCat.com
-					</pre>
-
-					<p>下面实例定义了一个没有任何字段的结构体，它们被称为“类单元结构体”：</p>
-					<pre class="brush: c;">
-					//这种结构体的用法，要在本系列后面的文章中才能用得到，这里只需要知道，可以这样定义就行
-					fn main() {
-					    struct nikkocat;
-					    let user1=nikkocat;
-					}
-					</pre>
-
-					<p>我们来看一个长方形面积计算的三种不同实现方式：</p>
-					<pre class="brush: c;">
-					//方法一：
-					fn main() {
-					    let width:i32=10;
-					    let height:i32=5;
-					    println!("Area={}",area(width,height));
-					}
-
-					fn area(w:i32, h:i32) -> i32 {
-					    w*h
-					}
-
-					//方法二：使用元组
-					fn main() {
-					    let wh:(i32,i32)=(5,10);
-					    println!("Area={}",area(&wh));
-					}
-
-					fn area(w_h:&(i32,i32)) -> i32 {
-					    w_h.0*w_h.1
-					}
-
-					//方法三：使用结构
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					fn main() {
-
-					    let area_rec=Rec {
-					        width:6,
-					        height:8,
-					    };
-
-					    println!("Area={}",area(&area_rec));
-					}
-
-					fn area(x:&Rec) -> i32 {
-					    x.width*x.height
-					}
-					</pre>
-
-
-					<h2 id="Rust-struct-3">0×3.通过println!和dbg!宏来调试程序</h2>
-
-					<p>首先我们尝试使用println!来打印结构体，看看会发生什么：</p>
-
-					<pre class="brush: c;">
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					fn main() {
-
-					    let area_rec=Rec {
-					        width:6,
-					        height:8,
-					    };
-
-					    println!("Area={}",area_rec);
-					}
-
-					//编译器给出一个错误：
-					//`Rec` cannot be formatted with the default formatter
-					// println!宏能够处理很多格式，{}告诉编译器，使用display来展示数据
-					//大部分简单的类型都实现了display方法，但是struct没有实现这个方法
-
-					//同样也给出了一个解决方案，打印这数据类型时，可以使用{:?}或者 {:#?}：
-					//note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
-
-					//我们尝试着按照编辑器给出的解决方法，将
-					println!("Area={}",area_rec);
-					//替换成
-					println!("Area={:?}",area_rec);
-
-					//再次编译时，又遇到了错误，提示不能使用`{:?}`来格式化输出Rec变量内容
-					`Rec` cannot be formatted using `{:?}`
-					//编译器再次给出提示，让我们尝试在结构语句前面，添加上#[derive(Debug)]：
-					 note: add `#[derive(Debug)]` to `Rec` or manually `impl Debug for Rec`
-
-					 //{:?}或{:#?}语法告诉println!宏打印调试消息，但是我们需要在被调试的结构前面添加#[derive(Debug)]才能实现这个功能，最后代码如下：
-					 #[derive(Debug)]
-					struct Rec {
-					    width:i32,
-					    height:i32,
-					}
-
-					fn main() {
-
-					    let area_rec=Rec {
-					        width:6,
-					        height:8,
-					    };
-					    //{:#?}的显示比{:?}更加的“可视化”
-					    println!("Area={:#?}",area_rec);
-					}
-
-					程序输出：
-					Area=Rec {
-					    width: 6,
-					    height: 8,
-					}
-					</pre>
-
-					<p>使用Debug格式打印数值的方法，除了println!宏外，我们还可以使用dbg!宏来实现，请看下面的实例：</p>
+					<p>一种简单的枚举声明实例：</p>
 
 					<pre class="brush: c;">
 					#[derive(Debug)]
-					struct Rec {
-					    width:i32,
-					    height:i32,
+					enum enum_info { //声明一个枚举，包含四个成员
+					    one,
+					    two,
+					    three,
+					    fore,
 					}
-					//dbg! 宏接收一个表达式的所有权，打印出代码中调用 dbg! 宏时所在的文件和行号，以及该表达式的结果值，并返回该值的所有权
+
 					fn main() {
-					    let x:i32=3;
-					    let area_rec=Rec {
-					        width:dbg!(x*6),  //dbg!接收x
-					        height:8,
-					    };
-					    //如果不想dbg!获取所有权，可以使用引用
-					    dbg!(&area_rec); 
+						//实例化枚举
+					    let x=enum_info::one;
+					    let y=enum_info::two;
+					    let z=enum_info::three;
+
+					    println!("{:?},{:?},{:?}", x, y, z);
 					}
 
 					程序输出：
-					[...test.rs:10] x * 6 = 18
-					[.../test.rs:14] area_rec = Rec {
-					    width: 18,
-					    height: 8,
+					one,two,three
+					</pre>
+
+					<p>枚举不仅仅可以包含成员，每个成员还可以包含不同类型的数据：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let user_name=enum_info::name("NikkoCat".to_string());
+					    let my_website=enum_info::website("www.nikkocat.com".to_string());
+					    let my_age=enum_info::age(19);
+					    let active=enum_info::active(true);
+
+					    println!("user_name={:?}", user_name);
+					    println!("my_website={:?}", my_website);
+					    println!("my_age={:?}", my_age);
+					    println!("active={:?}", active);
+					}
+
+					//使用调试方式输出
+					#[derive(Debug)]
+					enum enum_info { //每个成员都包含不同类型的数据
+					    name(String),
+					    website(String),
+					    age(i32),
+					    active(bool),
+					}
+
+					程序输出：
+					user_name=name("NikkoCat")
+					my_website=website("www.nikkocat.com")
+					my_age=age(19)
+					active=active(true)
+					</pre>
+
+					<p>枚举还能包含结构体（同样结构体也能包含枚举）：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let user_info=Enuminfo::Info(Userinfo{username:"Nikkocat".to_string(),age:19,});
+					    println!("{:#?}",user_info);
+					    let user_ip_addr=Enuminfo::IpV4Addr(192, 168, 1, 233);
+					    println!("{:?}",user_ip_addr);
+					}
+
+					#[derive(Debug)]
+					enum Enuminfo {
+					    Info(Userinfo), //将结构体包含在成员的数据中
+					    IpV4Addr(u8,u8,u8,u8),
+					}
+					#[derive(Debug)]
+					struct Userinfo {
+					    username:String,
+					    age:u32,
+					}
+
+					程序输出：
+					Info(
+					    Userinfo {
+					        username: "Nikkocat",
+					        age: 19,
+					    },
+					)
+					IpV4Addr(192, 168, 1, 233)
+					</pre>
+
+					<p>在Rust的标准库中，有一个叫做Option的枚举，代码如下：</p>
+					<pre class="brush: c;">
+					// &lt;T&gt;意味着 Option 枚举的 Some 成员可以包含任意类型的数据
+					//同时这个枚举中还包含一个"空值"
+					enum Option&lt;T&gt; {
+					    None,
+					    Some(T),
 					}
 					</pre>
-					<p>println!与dbg!不同之处在于，dbg!宏会打印到标准错误控制台流（stderr）， println!会打印到标准输出控制台流（stdout）；当你试图弄清楚你的代码在做什么，这两种调试方式会非常有帮助。</p>
+					<p>使用Option枚举的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let age=Some(19);
+					    let website=Some("NikkoCat.com");
+					    //必须显示的声明None属于Option&lt;T&gt;类型
+					    let none_value:Option&lt;u8&gt; = None;
+					    println!("{:?}", age);
+					    println!("{:?}", website);
+					    println!("{:?}",none_value);
+					}
+
+					程序输出：
+					Some(19)
+					Some("NikkoCat.com")
+					None
+					</pre>
+
+					<h2 id="Rust-enum-2">0×2.使用match读取枚举值</h2>
+
+					<p>读取枚举成员的数据的方式有很多，这里首先介绍使用match匹配语句来读取，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+						//实例化枚举成员
+					    let one=Enuminfo::one;
+					    let two=Enuminfo::two;
+
+					    println!("{} and {}",get_value(one), get_value(two));
+					}
+
+					//一个只包含成员的枚举
+					enum Enuminfo {
+					    one,
+					    two,
+					    three,
+					    four,
+					}
+
+					//根据实例化的成员，返回对应数据
+					fn get_value(enu:Enuminfo) -> u8 {
+					    match enu {
+					        Enuminfo::one => 1,
+					        Enuminfo::two => 2,
+					        Enuminfo::three => 3,
+					        Enuminfo::four => 4,
+					    }
+					}
+
+					程序输出：
+					1 and 2
+					</pre>
+
+					<p>那如果枚举的成员还包含数据，如何读取呢？请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    let user_name=Enuminfo::name("NikkoCat".to_string());
+					    let my_website = Enuminfo::website("www.nikkocat.com".to_string());
+					    let age=Enuminfo::age(19);
+
+					    //输出每个成员所包含的数据
+					    println!("name={}\nwebsite={}\nage={}", 
+					    get_value(user_name), 
+					    get_value(my_website), 
+					    get_value(age));
+					}
+
+					//包含不同成员数据的枚举
+					enum Enuminfo {
+					    name(String),
+					    website(String),
+					    age(u32),
+					}
+
+					//使用match模式匹配的方式，取出每个成员包含的数据返回
+					fn get_value(enu:Enuminfo) -> String {
+					    match enu {
+					        Enuminfo::name(u_name) => u_name.to_string(),
+					        Enuminfo::website(u_website) => u_website.to_string(),
+					        Enuminfo::age(u_age) => u_age.to_string(),
+					    }
+					}
+					</pre>
+
+					<p>如果我们只想要取出某一个成员的值：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let user_name=Enuminfo::name("NikkoCat".to_string());
+					    let my_website = Enuminfo::website("www.nikkocat.com".to_string());
+					    let age=Enuminfo::age(19);
+
+					    //只需要取出website的数据
+					    println!("website={}", get_value(my_website));
+
+					}
+
+					enum Enuminfo {
+					    name(String),
+					    website(String),
+					    age(u32),
+					}
+
+					//如果我们只需要取出某个成员的数据，可以使用下划线代替所有其他元素
+					fn get_value(enu:Enuminfo) -> String {
+					    match enu {
+					        Enuminfo::website(u_website) => u_website.to_string(),
+					        _ => "other".to_string(),
+					    }
+					}
+
+					程序输出：
+					website=www.nikkocat.com
+					</pre>
+
+					<p>对于上面这段程序，如果不使用函数，直接嵌套在变量后面的另外一种写法如下：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let user_name=Enuminfo::name("NikkoCat".to_string());
+					    let my_website = Enuminfo::website("www.nikkocat.com".to_string());
+					    let age=Enuminfo::age(19);
+
+					    //直接通过一个变量来获取website成员的值
+					    let website_data= match my_website {
+					        Enuminfo::website(u_website) => u_website.to_string(),
+					        _ => "other".to_string(),
+					    };
+					    println!("website={}", website_data);
+					}
+
+					enum Enuminfo {
+					    name(String),
+					    website(String),
+					    age(u32),
+					}
+
+					程序输出：
+					website=www.nikkocat.com
+
+					//或者，直接嵌套到println里面，如下：
+					println!("website={}", match my_website {
+				        Enuminfo::website(u_website) => u_website.to_string(),
+				        _ => "other".to_string(),
+				    });
+					</pre>
+
+					<h2 id="Rust-enum-3">0×3.使用if let读取枚举值</h2>
+
+					<p>如果只需要读取枚举中单个成员的值，有一种更加简洁的方式，使用if let语法，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    let user_name=Enuminfo::name("NikkoCat".to_string());
+					    let my_website = Enuminfo::website("www.nikkocat.com".to_string());
+					    let age=Enuminfo::age(19);
+
+					    //if let语句，可以很简洁的完成match单个模式匹配
+					    if let Enuminfo::website(web) = my_website {
+					        println!("{}", web);
+					    }
+					}
+
+					enum Enuminfo {
+					    name(String),
+					    website(String),
+					    age(u32),
+					}
+
+					程序输出：
+					www.nikkocat.com
+					</pre>
 
 					<!-- /正文 -->
 
@@ -423,7 +351,7 @@
 					<p>
 						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
 					</p>
-					<p>*原文连接:<a title="Rust-9-方法" href="https://www.nikkocat.com/cat/Rust-9.html" target="_blank">https://www.nikkocat.com/cat/Rust-9.html</a></p>
+					<p>*原文连接:<a title="Rust-9-枚举" href="https://www.nikkocat.com/cat/Rust-9.html" target="_blank">https://www.nikkocat.com/cat/Rust-9.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
