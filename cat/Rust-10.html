@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-10-Packages、Crates、Modules、Path - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>	
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-10-Packages、Crates、Modules、Path</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中的模块系统，在大型项目中，可以帮助我们更有序的管理代码。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-Packages-Crates-Modules-Path-1">0×1.Packages</a></li>
+						 <li><a href="#Rust-Packages-Crates-Modules-Path-2">0×2.Crates</a></li>
+						 <li><a href="#Rust-Packages-Crates-Modules-Path-3">0×3.Modules</a></li>
+						 <li><a href="#Rust-Packages-Crates-Modules-Path-4">0×4.Path</a></li>
+						 <li><a href="#Rust-Packages-Crates-Modules-Path-5">0×5.use</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-Packages-Crates-Modules-Path-1">0×1.Packages</h2>
+					<p>Packages在Rust中，其实就是使用Cargo创建的一个项目的文件夹，这个文件夹是一个集合，这个集合中，包含Crates，Modules区块，以及一些配置文件，我们可以使用下面的命令，创建一个Packages：</p>
+
+					<pre class="brush: c;">
+					//在命令行中，使用[cargo new 项目名称]来创建一个package
+					cargo new nikkocat_com
+				     Created binary (application) `nikkocat_com` package
+
+				    //我们进到这个package中，看看包含了什么文件
+					cd nikkocat_com
+
+					//使用tree命令，可以看到这个package中的完整结构
+					//包含一个toml文件，一个src文件夹
+					//src文件夹下有一个main.rs的文件
+					tree  
+					.
+					├── Cargo.toml
+					└── src
+					    └── main.rs
+					</pre>
+					<p>这就是初始状态下使用cargo命令生成的package中所包含的文件，一个包会包含有一个 Cargo.toml 文件，阐述如何去构建Crates，其中main.rs文件就是我们下面要说的Crate。</p>
+
+					<h2 id="Rust-Packages-Crates-Modules-Path-2">0×2.Crates</h2>
+					<p>所谓的Crates，实际上就是Package下（或者直接理解成项目文件夹下），所创建的源码文件，在这些源码文件中，有一些约定俗成的东西，如下：</p>
+					<p class="indent-p">
+					◆ Package中，只能包含一个库Crate（Library Crate），如果有，在src文件夹下，命名为lib.rs；<br>
+					◆ Package中，能够包含多个二进制Crate（binary crate），其他的二进制Crate可以放在src/bin目录中；<br>
+					◆ src/main.rs文件，被定义为二进制根Crate，src/lib.rs文件，被定义为库根Crate；<br>
+					◆ 编译器会从根Crate开始编译，寻找所包含的模块，库文件，其余的二进制Crate，组合编译成可执行文件；<br>
+					◆ 二进制根Crate以及库根Crate的名称，与Package名称相同，即使用cargo创建的项目的名称；<br>
+					◆ Package中，必须至少包含一个Crate；<br>
+					◆ Package中，包含了一个Cargo.toml文件，用于描述如何构建这些Crates；<br>
+					</p>
+					<p>Cargo.toml文件中还包含了一些外部包的调用，它会根据我们写入的外部包名称与版本号，自动前往crates.io这个网站去下载这些包，然后我们就能使用本文后面介绍的use关键字来引用这些包，并且在代码中使用它们包含的功能。</p>
+
+					<h2 id="Rust-Packages-Crates-Modules-Path-3">0×3.Modules</h2>
+					<p>Modules用于在Crate中，对代码进行分组，可以增加代码可读性，易于复用，能够标记模块中代码的私有或公用，并且模块还可以多层嵌套使用，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+						//nikkocat模块相对于main函数是在同一层级，所以可以直接使用相对路径调用
+					    nikkocat::print_website();
+					   	//也可以使用绝对路径进行调用，crate就代表当前项目名称
+					    crate::nikkocat::print_name();
+					    crate::nikkocat::print_age();
+					}
+
+					//定义了一个叫做nikkocat的模块
+					mod nikkocat {
+						//模块下的公共函数，如果需要被外部调用，需要在函数前加上pub关键字
+					    pub fn print_website() {
+					        println!("www.nikkocat.com");
+					    }
+
+					    pub fn print_name() {
+					        sub_nikkocat::show_name();
+					    }
+
+					    pub fn print_age() {
+					        sub_nikkocat::show_age();
+					    }
+
+					    //这是nikkocat模块下的私有模块，只能被nikkocat模块内部函数调用
+					    mod sub_nikkocat {
+					        pub fn show_name() {
+					            println!("NikkoCat");
+					        }
+					        pub fn show_age() {
+					            print_age();
+					        }
+					        //模块下的私有函数，只能被模块内部调用
+					        fn print_age() {
+					            println!("{}",19);
+					        }
+					    }
+					}
+
+					代码输出：
+					www.nikkocat.com
+					NikkoCat
+					19
+
+					//这个项目的crate树形结构如下：
+					crate
+					 ├── main
+					 └── nikkocat
+					 	├── print_website
+					    ├── print_name
+					    ├── print_age
+					    └── sub_nikkocat
+							├── show_name
+							├── show_age
+							└── print_age
+					</pre>
+
+					<p>父模块无法访问子模块中的私有条目，但是子模块可以访问父模块中的私有条目，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    nikkocat::px();
+					}
+
+					mod nikkocat {
+					    fn print_website() {
+					        println!("www.nikkocat.com");
+					    }
+					    //被main函数调用的公共函数
+					    pub fn px() {
+					    	//调用子模块中的函数，子模块包括被调用的函数必须添加pub关键词，否则无法调用
+					        sub_nikkocat::sub_sub_nikkocat::print_website();
+					    }
+
+					    pub mod sub_nikkocat {
+					        pub mod sub_sub_nikkocat {
+					           pub fn print_website() {
+					           		//子模块中的函数，可以调用父模块中的私有函数
+					                super::super::print_website();
+					            }
+					        }
+					    }
+					}
+					</pre>
+
+					<p>这里有两个特例，struct和enum：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let x_x=nikkocat::StructInfo {
+					        name:"NikkoCat".to_string(),
+					        website:"NikkoCat.com".to_string(),
+					    };
+
+					    let y_y=nikkocat::EnumInfo::One;
+					    let z_z=nikkocat::EnumInfo::Two;
+					}
+
+					mod nikkocat {
+						//当模块中包含struct时，如果这个struct想要外部访问，包括struct在内所有子条目，都需要加上pub
+					    pub struct StructInfo {
+					        pub name: String,
+					        pub website: String,
+					    }
+
+					    //当模块中包含enum时，如果外部需要访问，只需要在enum前加上pub即可
+					    pub enum EnumInfo {
+					        One,
+					        Two,
+					    }
+					}
+					</pre>
+
+					<p>如果我们想要struct中的一部分条目拥有pub，可以使用下面的方法：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let mut x=nikkocat::StructInfo::init("Nikko");
+					    println!("{}", x.name);
+					    x.name="NikkoCat".to_string();
+					    println!("{}", x.name);
+
+					    //加上下面这一句就会报错，website是一个私有条目，如果想要访问他，需要在struct里面website条目前面加上pub关键字
+					    println!("{}", x.website);
+					}
+
+					mod nikkocat {
+					    pub struct StructInfo {
+					        pub name: String,
+					        //私有条目，只有内部代码可以访问
+					        website: String,
+					    }
+
+					    impl StructInfo {
+					    	//因为website是一个私有条目，只能借助一个内部构造函数来创建StructInfo的实例
+					        pub fn init(user_name:&str) -> StructInfo {
+					            StructInfo {
+					                name:user_name.to_string(),
+					                website:"NikkoCat.com".to_string(),
+					            }
+					        }
+					    }
+					}
+					</pre>
+					<h2 id="Rust-Packages-Crates-Modules-Path-4">0×4.Path</h2>
+
+					<p>在同一个crate下，模块或函数之间，也存在层级关系，这个层级关系类似linux中的目录层级，也存在相对路径和绝对路径，绝对路径从根crate开始，例如“crate::nikkocat::sub_nikkocat::print_website()”，代表crate下的nikkocat模块中的子模块sub_nikkocat中的print_website函数，而相对路径以当前代码所在位置作为起点，super关键词代表上一个层级，例如“super::print_website()”代表上一层中的print_website函数。</p>
+
+					<p>如果我们的crate树形结构如下：</p>
+					<pre class="brush: c;">
+					crate
+					 ├── main
+					 └── nikkocat
+					 	├── print_website
+					    └── sub_nikkocat
+							└── print_website
+					</pre>
+					<p>我们需要使用sub_nikkocat中的print_website去调用父级中的print_website，可以使用super关键词，super关键词相当于linux中的..代表上一级目录，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    nikkocat::sub_nikkocat::print_website();
+					}
+
+					mod nikkocat {
+					    fn print_website() {
+					        println!("www.nikkocat.com");
+					    }
+
+					    pub mod sub_nikkocat {
+					        pub fn print_website() {
+					        	//使用super关键词去上一级调用print_website函数
+					            super::print_website();
+					        }
+					    }
+					}
+					</pre>
+
+					<p>那么如果我们的crate层级是下面这种：</p>
+
+					<pre class="brush: c;">
+					crate
+					 ├── main
+					 └── nikkocat
+					 	├── print_website
+					    └── sub_nikkocat
+					    	└── sub_sub_nikkocat
+								└── print_website
+					</pre>
+
+					<p>通过sub_sub_nikkocat中的print_website去调用nikkocat中print_website的方法就是添加两个super，相当于../../，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    nikkocat::sub_nikkocat::sub_sub_nikkocat::print_website();
+					}
+
+					mod nikkocat {
+						//这个函数只被内部代码调用，所以不需要添加pub
+					    fn print_website() {
+					        println!("www.nikkocat.com");
+					    }
+
+					    //这是被外部代码调用的模块，所以添加pub关键词
+					    pub mod sub_nikkocat {
+					        pub mod sub_sub_nikkocat {
+					            pub fn print_website() {
+					            	//通过两个super，来访问nikkocat中的print_website
+					                super::super::print_website();
+					            }
+					        }
+					    }
+					}
+					</pre>
+					<p>这里有个问题，我们通过外部main函数访问内部子模块的时候，模块必须添加pub关键词才能访问到，但是为什么访问nikkocat模块的时候，nikkocat模块并不需要添加pub关键词就能被访问到呢？这是因为main和nikkocat模块属于同一个根层级，默认情况下，同属于根层级的函数以及模块，都可以互相调用，但是对于模块内部的子模块或函数，Rust默认定义为私有，如果想要从外部访问，必须添加pub关键词，转化成“公共”，才可访问到。</p>
+
+					<h2 id="Rust-Packages-Crates-Modules-Path-5">0×5.use</h2>
+
+					<p>use语句可以用来简化path输入，引用不同位置的模块，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//使用use，将nikkocat中的sub_sub_nikkocat子模块，引用到当前域中
+					use nikkocat::sub_nikkocat::sub_sub_nikkocat;
+
+					mod nikkocat {
+					    pub mod sub_nikkocat {
+					        pub mod sub_sub_nikkocat {
+					            pub fn print_website() {
+					                println!("NikkoCat.com");
+					            }
+					        }
+					    }
+					}
+
+					fn main() {
+						//只需要使用子模块的名称就能调用对应函数
+					    sub_sub_nikkocat::print_website();  
+					}
+
+					程序输出：
+					NikkoCat.com
+					</pre>
+
+					<p>如果在同一个模块中，有多个模块需要引用到当前域下，可以使用大括号，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//将nikkocat模块下的两个子模块引入
+					use nikkocat::{sub_nikkocat_1,sub_nikkocat_2};
+
+					//如果我们同时要引用这两个子模块，还需要引用nikkocat这个父模块本身，可以用self这个关键词，改成下面的形式
+					use nikkocat::{self,sub_nikkocat_1,sub_nikkocat_2};
+
+					//如果想要一次性引入nikkocat下面所有的子模块，还可以使用*号，如下
+					use nikkocat::*;
+
+					mod nikkocat {
+					    pub mod sub_nikkocat_1 {
+					        pub fn print_website() {
+					            println!("NikkoCat.com");
+					        }
+					    }
+
+					    pub mod sub_nikkocat_2 {
+					        pub fn print_website() {
+					            println!("www.NikkoCat.com");
+					        }
+					    }
+					}
+
+					fn main() {
+					    sub_nikkocat_1::print_website();
+					    sub_nikkocat_2::print_website();  
+					}
+
+					程序输出：
+					NikkoCat.com
+					www.NikkoCat.com
+					</pre>
+
+					<p>除此之外，还可以给引入的模块使用as关键字指定一个别名，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//分别给nikkocat模块下的子模块指定别名
+					use nikkocat::{sub_nikkocat_1 as s1,sub_nikkocat_2 as s2};
+
+					mod nikkocat {
+					    pub mod sub_nikkocat_1 {
+					        pub fn print_website() {
+					            println!("NikkoCat.com");
+					        }
+					    }
+
+					    pub mod sub_nikkocat_2 {
+					        pub fn print_website() {
+					            println!("www.NikkoCat.com");
+					        }
+					    }
+					}
+
+					fn main() {
+						//使用别名来调用
+					    s1::print_website();
+					    s2::print_website();  
+					}
+					</pre>
+
+					<p>如果这个文件中的两个子模块不仅仅是当前文件需要使用，还有外部文件也需要使用，可以在use前面加上pub，这样就相当于当前文件引用了nikkocat的子模块，并且又将它们导出给外部文件调用。</p>
+					<p>另外，我们可以通过在Cargo.toml文件中，写入我们需要从crates.io上下载的外部组件名称来引用他们，也可以直接引用Rust内置的库文件，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//创建一个项目包
+					cargo new nikkocat_com
+
+					//修改Cargo.toml文件，添加随机数模块
+					[dependencies]
+					rand = "0.8.3"  //添加这一行，rand模块以及版本
+
+					//在src/main.rs中，写入下面的代码
+					use rand::Rng;   //这里引入的就是一个外部模块
+					use std::io;  //这里引入的就是一个Rust集成了的内部模块
+
+					fn main() {
+					    let secret_number = rand::thread_rng().gen_range(1..101);
+					    let mut guess=String::new();
+					    io::stdin().read_line(&mut guess).expect("Failed to read line");
+
+					    println!("secret_number = {}\nguess = {}",secret_number,guess);
+					}
+
+					//修改cargo源，指定清华大学源，否则从crates.io上下载rand模块文件会很慢
+					vim ~/.cargo/config
+
+					//添加下面的内容
+					[source.crates-io]
+					replace-with = 'tuna'
+
+					[source.tuna]
+					registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+					//最后执行程序
+					cargo run
+
+					程序输出：
+					cargo run
+					    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+					    Running `target/debug/nikkocat_com`
+					19  //手动输入19
+					secret_number = 95
+					guess = 19
+					</pre>
+
+					<p>如果我们想要在根crate中引用同目录下的模块文件，可以使用下面的方法：</p>
+					
+					<pre class="brush: c;">
+					//使用mod引用同目录下的模块文件，nikkocat
+					mod nikkocat;
+					use nikkocat::{sub_nikkocat_1 as s1,sub_nikkocat_2 as s2};
+
+					fn main() {
+					    s1::print_website();
+					    s2::print_website();  
+					}
+
+					//在当前代码文件目录中，创建一个名为nikkocat.rs的文件，写入下面的内容
+					//这个nikkocat.rs文件，可以被当做模块文件使用，里面的公共模块和函数，都能被调用
+					pub mod sub_nikkocat_1 {
+					    pub fn print_website() {
+					        println!("NikkoCat.com");
+					    }
+					}
+
+					pub mod sub_nikkocat_2 {
+					    pub fn print_website() {
+					        println!("www.NikkoCat.com");
+					    }
+					}
+
+					程序输出：
+					NikkoCat.com
+					www.NikkoCat.com
+					</pre>
+
+					<p>现在我们假设，nikkocat.rs这个模块中的子模块2需要再被单独放到一个独立的文件中，这个子模块sub_nikkocat_2属于nikkocat这个模块，所以我们需要在目录中新建一个nikkocat目录，将隶属于nikkocat模块的子模块文件，全部放到这个目录中，请看下面的实例：</p>
+					<pre class="brush: c;">
+					//main.rs文件内容
+					mod nikkocat;  //加载当前目录中的nikkocat.rs模块文件
+					use nikkocat::{sub_nikkocat_1 as s1,sub_nikkocat_2 as s2};
+
+					fn main() {
+					    s1::print_website();
+					    s2::print_website();  
+					}
+
+					//nikkocat.rs模块文件内容
+					pub mod sub_nikkocat_1 {
+					    pub fn print_website() {
+					        println!("NikkoCat.com");
+					    }
+					}
+					//引入独立文件模块
+					pub mod sub_nikkocat_2; 
+
+					//在main.rs目录中，创建一个nikkocat目录，在下面创建一个sub_nikkocat_2.rs模块文件，内容如下
+					pub fn print_website() {
+					    println!("www.NikkoCat.com");
+					}
+
+					//这个项目文件的层级结构如下：
+					.
+					├── main.rs
+					├── nikkocat
+					│   └── sub_nikkocat_2.rs
+					└── nikkocat.rs
+
+					//我们通过main.rs文件，引用了nikkocat.rs模块文件，而nikkocat.rs模块中又引用了独立的sub_nikkocat_2.rs模块，sub_nikkocat_2.rs模块隶属于nikkocat.rs模块，所以要放在名为nikkocat的文件夹下
+					</pre>
+
+					<p>随着项目的不断壮大，这种模块化的设计可以让我们将不同的功能存放在单独的模块文件中，再通过上面阐述的这种方式去引用它们。</p>
+
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-10-Packages、Crates、Modules、Path" href="https://www.nikkocat.com/cat/Rust-10.html" target="_blank">https://www.nikkocat.com/cat/Rust-10.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
