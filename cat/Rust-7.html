@@ -193,7 +193,24 @@
 					slice: NikkoCat.com
 					Welcome to my website NikkoCat.com
 					</pre>
-					
+
+					<p>对于上面这个程序，还有一个更加简单的实现方式，使用split_whitespace()函数，split_whitespace()函数会根据字符串中的空格来分割单词，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="Hello Welcome to my website NikkoCat.com";
+					    for s in s1.split_whitespace() {
+					        println!("{}", s);
+					    }
+					}
+
+					程序输出：
+					Hello
+					Welcome
+					to
+					my
+					website
+					NikkoCat.com
+					</pre>
 					<!-- /正文 -->
 
 				<footer class="text-footer">

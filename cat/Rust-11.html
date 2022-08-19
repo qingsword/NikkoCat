@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-11-Vector、String、HashMap - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>	
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-11-Vector、String、HashMap</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中集合的使用。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-Vector-1">0×1.Vector</a></li>
+						 <li><a href="#Rust-Vector-2">0×2.String</a></li>
+						 <li><a href="#Rust-Vector-3">0×3.HashMap</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-Vector-1">0×1.Vector</h2>
+					<p>创建集合，向集合内添加元素，并且读取单个元素：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    //创建集合的几种方式
+					    let mut vlist_1:Vec&lt;char&gt;=Vec::new();
+					    let mut vlist_2=Vec::new();
+					    let mut vlist_3=vec![1,2,3,4];
+					    let mut vlist_4=vec!["a","NikkoCat","NikkoCat.com"];
+
+					    //使用push给集合添加值
+					    vlist_1.push('a');
+					    vlist_1.push('b');
+					    vlist_1.push('c');
+
+					    vlist_2.push(1);
+					    vlist_2.push(2);
+					    vlist_2.push(3);
+					    vlist_2.push(4);
+
+					    //读取集合值的几种方法
+
+					    //方法一：使用索引
+					    let x=&vlist_1[1];
+					    println!("{}",x);
+
+					    //方法二：使用match进行模式匹配
+					    //vector的get方法返回的是一个&lt;Option&gt;枚举
+					    //方法一如果访问了一个超出索引范围的值会直接报错
+					    //方法二能很好的解决索引访问边界的问题
+					    match vlist_2.get(2) {
+					        Some(x) => println!("{}",x),
+					        None => println!("None"),
+					    }
+					}
+					</pre>
+
+					<p>用循环遍历集合中的内容：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let vlist=vec![1,2,3,4,5,6];
+					    for i in &vlist {
+					        println!("{}", i);
+					    }
+					}
+
+					程序输出：
+					1
+					2
+					3
+					4
+					5
+					6
+
+					//使用解引用，将集合每个值都加一
+					fn main() {
+					    let mut vlist=vec![1,2,3,4,5,6];
+					    for i in &mut vlist {
+					        *i+=1;
+					    }
+					    for i in &vlist {
+					        println!("{}", i);
+					    }
+					}
+
+					程序输出：
+					2
+					3
+					4
+					5
+					6
+					7
+					</pre>
+
+					<p>默认情况下，Vector集合的元素必须是相同类型，如果我们需要在Vector集合中储存不同类型的值，可以使用enum枚举，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+						//Vector的集合类型是名为Info的枚举类型
+					    let mut vlist=vec![
+					        Info::Name("Nikkocat.com".to_string()),
+					        Info::Age(19),
+					        Info::Cv("A shrewish Cat".to_string())
+					        ];
+					    
+					    //单独取出Name成员的值，并修改成"www.NikkoCat.com"
+					    if let Info::Name(s) = &mut vlist[0] {
+					        *s="www.NikkoCat.com".to_string();
+					    }
+					    //打印出修改后的值
+					    if let Info::Name(s) = &mut vlist[0] {
+					        println!("{}", s);
+					    }
+					}
+
+					enum Info {
+					    Name(String),
+					    Age(u32),
+					    Cv(String),
+					}
+
+					程序输出：
+					www.NikkoCat.com
+
+					//方法二：使用match
+					fn main() {
+					    let mut vlist=vec![
+					        Info::Name("Nikkocat.com".to_string()),
+					        Info::Age(19),
+					        Info::Cv("A shrewish Cat".to_string())
+					        ];
+					    
+					    match vlist.get(0) {
+					    	//注意，方法二中的这一句s是一个引用，并且不是可变引用
+					    	//所以并不能通过这个s去修改Name成员的值
+					        Some(Info::Name(s)) => println!("{}", s),
+					        Some(Info::Age(i)) => println!("{}", i),
+					        Some(Info::Cv(c)) => println!("{}", c),
+					        None => println!("None"),
+					    }
+					}
+
+					enum Info {
+					    Name(String),
+					    Age(u32),
+					    Cv(String),
+					}
+
+					程序输出：
+					Nikkocat.com
+					</pre>
+
+					<h2 id="Rust-Vector-2">0×2.String</h2>
+					<p>在Rust中，字符串使用UTF-8编码存储，实际上就是基于字节（Byte）的集合，并且，Rust提供了一些方法，能够将字节解析为文本。</p>
+
+					<p>创建与拼接字符串的例子：</p>
+					<pre class="brush: c;">
+					fn main() {
+						//三种方式创建String字符串类型
+					    let mut s_1="NikkoCat".to_string();
+					    let mut s_2=String::new();
+					    let mut s_3=String::from("NikkoCat");
+
+					    //创建了一个&str类型
+					    let s_4=".com";
+
+					    //使用push_str追加字符串到末尾
+					    s_1.push_str(&s_4);
+					    println!("{}", s_1);
+
+					    //使用push追加单个字符到末尾
+					    s_2.push('.');
+					    s_2.push('c');
+					    s_2.push('o');
+					    s_2.push('m');
+					    println!("{}", s_2);
+
+					    //加号前面的类型是一个String，加号后面的类型必须是一个引用的字符串类型或&str
+					    let mut s_5=s_3+s_4;
+					    println!("{}",s_5);
+					    //此时再调用s_3就会报错，因为加号前面的s_3被传入了Rust的add函数中，所有权也一并被带走，而s_4本身是一个&str，所以add函数并不会回去它的所有权
+					    //println!("{}",s_3);
+
+					    //当加号后面是一个String时，需要在String类型前面添加引用符号
+					    //同理，add函数会获取s_1的所有权，但是不会获取s_2的所有权
+					    //这意味着s_1在这之后会被释放，不再能调用，而s_2仍然有用
+					    let mut s_6=s_1+&s_2;
+					    println!("{}",s_6);
+					}
+					</pre>
+
+					<p>使用加号和push_str函数拼接多个字符串：</p>
+					<pre class="brush: c;">
+					//使用加号和push_str函数拼接多个字符串
+					fn main() {
+					    let mut s1="Nikko".to_string();
+					    let s2="Cat".to_string();
+					    let s3=".com".to_string();
+
+					    //使用加号拼接多个字符串
+					    println!("{}", s1+&s2+&s3);
+
+					    //使用push_str来拼接多个字符串
+					    //push_str函数不会获取s4的所有权
+					    let mut s4="Nikko".to_string();
+					    s4.push_str(&s2);
+					    s4.push_str(&s3);
+					    println!("{}", s4);
+					}
+
+					程序输出：
+					NikkoCat.com
+					NikkoCat.com
+					</pre>
+
+					<p>使用format!宏函数，拼接多个字符串的例子：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="Nikko".to_string();
+					    let s2="Cat".to_string();
+					    let s3=".com".to_string();
+					    //同push_str函数一样，format!同样不会获取传入参数的所有权
+					    println!("{}",format!("{}{}{}",s1,s2,s3));
+					}
+
+					程序输出：
+					NikkoCat.com
+					</pre>
+					
+					<p>Rust的String类型实际上是对Vec&lt;u8&gt;类型的一个包装，String中的每个字符，都被储存到一个或多个byte中，可以使用len()方法查看一个String字符串占用了多少个字节，如下：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="NikkoCat.com".to_string();
+					    println!("{}", s1.len());
+					}
+
+					//程序输出
+					12
+					</pre>
+
+					<p>在Rust中，字符串不支持索引语法访问，因为无法确定一个字符串中的单个字符到底占用多少个字节，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="Здравствуйте".to_string();
+					    println!("{}", s1.len());
+					}
+
+					//从字面上看，似乎这个字符串只占用了12个字节，但实际程序的输出如下
+					24
+
+					//这是因为字符串中的字母是西里尔字母，每个字符都需要两个字节来储存
+					</pre>
+
+					<p>当我们再通过索引去访问这个字符串的时候，s1[0]代表的就只是这段西里尔字符串第一个字母的前半部分，而s1[0]+s1[1]才代表了这个字符'З'，但在英文字符环境下，纯英文的单个字符又被储存在单个byte里，这种存储上的差异，会出现读取上的bug，所以Rust并没有提供这种会导致bug的字符串索引方式。</p>
+					<p>除此之外，Rust不支持String索引的另外一个重要原因，是因为字符串索引效率很低。</p>
+
+					<p>对于字符串，可以使用下面两种方式来索引：</p>
+					<pre class="brush: c;">
+					//方法一：通过bytes
+					fn main() {
+					    let s1="Здравствуйте".to_string();
+					    
+					    for s in s1.bytes() {
+					          println!("{}", s);
+					    }
+					}
+
+					程序输出，每两个字节代表一个西里尔字符：
+					208
+					151
+					208
+					180
+					209
+					128
+					208
+					176
+					208
+					178
+					209
+					129
+					209
+					130
+					208
+					178
+					209
+					131
+					208
+					185
+					209
+					130
+					208
+					181
+
+					//方法二，通过chars
+					fn main() {
+					    let s1="Здравствуйте".to_string();
+					    
+					    for s in s1.chars() {
+					        if s == 'д' {
+					            println!("{}", s);
+					        }
+					    }
+					}
+
+					程序输出：
+					З
+					д
+					р
+					а
+					в
+					с
+					т
+					в
+					у
+					й
+					т
+					е
+
+					//如果要匹配查找单个字符
+					fn main() {
+					    let s1="Здравствуйте".to_string();
+					    
+					    for s in s1.chars() {
+					        if s == 'д' {
+					            println!("{}", s);
+					        }
+					    }
+					}
+
+					程序输出：
+					д
+					</pre>
+
+					<p>字符串的切割可以使用[]指定切割范围来实现，但是必须谨慎使用，例如上面的这个西里尔字符串，每两个字节包含一个字符，切割的时候，需要注意不能将代表同一个字符的两个字节分开切割，否则就无法编译通过，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					fn main() {
+					    let s1="Здравствуйте".to_string();
+					    
+					    //字符串切割[0..4]语法，相当于切割从第0个字节到第3个字节，一共四个字节
+					    //我们知道西里尔字符一个字符占用两个字节，这一句&s1[0..4]刚好切割出前面两个字符
+					    println!("{}", &s1[0..4]);
+					}
+
+					程序输出：
+					Зд
+
+					//如果我们将切割语句改成
+					println!("{}", &s1[0..3]);
+					//这相当于从第0个取到第2个字节，一共3个字节，这意味着'д'这个字符只被取出了前半部分数据，编译器会报错，提示这个索引3不是一个char的边界，这在字符串切割中需要特别注意，我们切割字符串之前，必须先了解这一串字符串每个字符占用的字节，然后沿着这个字节边界去切割
+					</pre>
+
+					<h2 id="Rust-Vector-3">0×3.HashMap</h2>
+					<p>HashMap使用一种“键值对”的形式来储存一组集合，并且“键值对”中键必须是相同的类型，值也必须是相同的类型，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					//HashMap模块需要从标准库中引用
+					use std::collections::HashMap;
+
+					fn main() {
+						//创建一个HashMap实例
+					    let hmp=HashMap::new();
+
+					    //向这个实例添加两个键值对，键都为整数型，值都为String类型
+					    hmp.insert(1,"NikkoCat".to_string());
+					    hmp.insert(2,"NikkoCat.com".to_string());
+					}
+					</pre>
+
+					<p>除了使用上面的方法，还能够使用两个vector来创建HashMap，请看下面的实例：</p>
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+						//创建两个集合，一个用作HashMap的Key，一个用作HashMap的Value
+					    let k_vec=vec![1,2,3,4];
+					    let v_vec=vec!["one", "two", "three", "four"];
+
+					    //collect()会返回一个集合，collect()函数需要知道返回的集合是什么类型，所以这里必须指定HashMap&lt;_,_&gt;，iter()函数遍历集合，再使用zip()函数，将前后两个遍历出来的集合组合成一个元组，最后通过collect()函数返回一个指定类型的集合
+					    let hmp:HashMap&lt;_,_&gt;=k_vec.iter().zip(v_vec.iter()).collect();
+
+					    //可以分别打印出上面这一句中每一部分的内容
+					    //第一行是k_vec集合中的内容
+					    //第二行是v_vec集合中的内容
+					    //第三行for语句，打印出zip()函数联合k_vec与v_vec两个集合，组成的一个个元组的数据形式
+					    println!("{:?}", k_vec.iter());
+					    println!("{:?}", v_vec.iter());
+					    for x in k_vec.iter().zip(v_vec.iter()) {
+					        println!("{:?}",x)
+					    }
+
+					    //最后打印出使用collect()函数，通过zip()函数组成的元组，生成的HashMap集合
+					    println!("{:?}", hmp);
+					}
+
+					程序输出：
+					Iter([1, 2, 3, 4])
+					Iter(["one", "two", "three", "four"])
+					(1, "one")
+					(2, "two")
+					(3, "three")
+					(4, "four")
+					{1: "one", 2: "two", 3: "three", 4: "four"}
+					</pre>
+					<p>注：zip()函数，会取第一个表达式，也就是self的第一个元素，与第二个表达式的第一个参数，这两个参数组成一个元组，后面的元素以此类推，最后返回一个包含元组参数对的Zip类型集合，例如，第一个表达式是[1,2,3]，第二个表达式是[4,5,6]，使用zip后就变成(1,4),(2,5),(3,6)这种形式的集合。</p>
+
+					<p>HashMap的所有权，当传入的数据类型是整形、布尔型等等储存在栈上的数据时，HashMap实例不会获得其所有权，但当传入的数据是String这种存储在堆上的数据时，HashMap会获取其所有权，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+						//定义了一个整形和一个String
+					    let k_inum:u16=12;
+					    let v_str="NikkoCat.com".to_string();
+
+					    //将这两个数据都传入HashMap实例中
+					    let mut hmp=HashMap::new();
+					    hmp.insert(k_inum,v_str);
+					    println!("{:?}", hmp);
+
+					    //整形仍然能够访问，但是String不能访问，编辑器会提示，v_str已经被remove
+					    println!("{}",k_inum);
+					    //println!("{}",v_str);
+					}
+
+					程序输出：
+					{12: "NikkoCat.com"}
+					12
+
+					//如果想要HashMap的实例不获取String的所有权，可以使用引用的方式传入字符串数据，如下
+					hmp.insert(k_inum,&v_str);
+
+					//使用引用的方式传入HashMap的值，例如上面的这个&v_str字符串，必须在HashMap实例失效前保持有效，否则这里会出现一个bug
+					</pre>
+
+					<p>使用get方法，根据HashMap中的key返回value：</p>
+
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+					    let k_inum:u16=12;
+					    let v_str="NikkoCat.com".to_string();
+
+					    //创建HashMap实例，写入两个键值对
+					    let mut hmp=HashMap::new();
+					    hmp.insert(k_inum,v_str);
+					    hmp.insert(13,"NikkoCat".to_string());
+
+					    //使用match匹配，HashMap的get函数会返回一个Option&lt;&amp;V&gt;枚举
+					    let val=match hmp.get(&k_inum) {
+					        Some(v) => v,
+					        None => "None",
+					    };
+
+					    println!("{}",val);
+					}
+
+					程序输出：
+					NikkoCat.com
+					</pre>
+
+					<p>使用for循环对HashMap进行遍历：</p>
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+					    let mut hmp=HashMap::new();
+					    hmp.insert(12,"NikkoCat.com".to_string());
+					    hmp.insert(13,"NikkoCat".to_string());
+
+					    //向for循环传入HashMap实例的引用
+					    for (k,v) in &hmp {
+					        println!("Key={},Value={}",k,v);
+					    }
+					}
+
+					程序输出：
+					Key=13,Value=NikkoCat
+					Key=12,Value=NikkoCat.com
+					</pre>	
+
+					<p>HashMap的大小是可变化的，也就是说我们可以任意添加删除HashMap的键值对，请看下面的实例：</p>
+					<p>第一种方法，不检查是否存在，直接覆盖原有值；</p>
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+					    let mut hmp=HashMap::new();
+					    hmp.insert(1, "NikkoCat");
+					    println!("原来的HashMap：{:?}", hmp);
+
+					    //不检查，直接覆盖原有Key对应的值
+					    hmp.insert(1, "NikkoCat.com");
+					    println!("更新后的HashMap：{:?}", hmp);
+					}
+
+					程序输出：
+					原来的HashMap：{1: "NikkoCat"}
+					更新后的HashMap：{1: "NikkoCat.com"}
+					</pre>	
+
+					<p>方法二，首先使用HashMap中的entry函数判断HashMap中的key是否存在，如果存在则不覆盖，请看下面的实例：</p>
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+					    let mut hmp=HashMap::new();
+					    hmp.insert(1, "NikkoCat");
+					    println!("原来的HashMap：{:?}", hmp);
+
+					    //打印出判断结果
+					    println!("{:?}", hmp.entry(1));
+					    println!("{:?}", hmp.entry(2));
+
+					    //如果key存在则不会执行or_insert函数
+					    hmp.entry(1).or_insert("NikkoCat.com");
+					    hmp.entry(2).or_insert("NikkoCat.com");
+					    println!("更新后的HashMap：{:?}", hmp);
+					}
+
+					程序输出：
+					原来的HashMap：{1: "NikkoCat"}
+					Entry(OccupiedEntry { key: 1, value: "NikkoCat", .. })
+					Entry(VacantEntry(2))
+					更新后的HashMap：{2: "NikkoCat.com", 1: "NikkoCat"}
+
+					//从输出的第二行和第三行可以看到，entry判断key为1的条目存在，而key为2的条目是空的，所以不会更新key为1的条目
+					</pre>	
+
+					<p>利用HashMap，设计一个统计英文单词出现次数的小程序：</p>
+					<pre class="brush: c;">
+					use std::collections::HashMap;
+					fn main() {
+					    let str_nikkocat=
+					    "Hello Hello Welcome to to my my my website website
+					    NikkoCat.com NikkoCat.com NikkoCat.com NikkoCat.com";
+
+					    let mut hmp=HashMap::new();
+
+					    //对每个单词，做一个entry，判断单词是否存在，如果不存在，则插入单词本身作为key，插入0作为value，因为or_insert()函数会返回插入的value的可变引用，所以可以使用解引用，给count加1，代表单词出现了一次；同理，如果单词存在，那么就不执行or_insert(0)插入0的操作，但是or_insert()函数仍然会返回存在的key对应的value的可变引用，这个时候，再对这个可变引用做解引用+1，就相当于又找到了一次相同的单词
+					    for word in str_nikkocat.split_whitespace() {
+					        let count= hmp.entry(word).or_insert(0);
+					        *count+=1;
+					    }
+
+					    println!("{:#?}",hmp);
+					}
+
+					程序输出：
+					{
+					    "website": 2,
+					    "Hello": 2,
+					    "my": 3,
+					    "to": 2,
+					    "Welcome": 1,
+					    "NikkoCat.com": 4,
+					}
+					</pre>	
+
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-11-Vector、String、HashMap" href="https://www.nikkocat.com/cat/Rust-11.html" target="_blank">https://www.nikkocat.com/cat/Rust-11.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>

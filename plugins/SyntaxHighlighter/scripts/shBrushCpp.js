@@ -56,7 +56,7 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'time_t __time64_t _timeb __timeb64 tm uintptr_t _utimbuf ' +
 					'va_list wchar_t wctrans_t wctype_t wint_t signed';
 
-	var keywords =	' impl struct as break const continue crate else enum extern false fn for if impl in let loop match mod move mut pub ref return Self self static struct super trait true type unsafe use where while union break case catch class const __finally __exception __try ' +
+	var keywords =	'None HashMap impl struct as break const continue crate else enum extern false fn for if impl in let loop match mod move mut pub ref return Self self static struct super trait true type unsafe use where while union break case catch class const __finally __exception __try ' +
 					'const_cast continue private public protected __declspec ' +
 					'default delete deprecated dllexport dllimport do dynamic_cast ' +
 					'else enum explicit extern if for friend goto inline ' +
@@ -66,7 +66,8 @@ SyntaxHighlighter.brushes.Cpp = function()
 					'thread throw true false try typedef typeid typename union ' +
 					'using uuid virtual void volatile whcar_t while';
 					
-	var functions =	'push_str push len from iter enumerate to_string Err Ok cmp ' +
+	var functions =	'format bytes chars vec zip Some get insert split_whitespace entry or_insert ' +
+					'push_str push len from iter enumerate to_string Err Ok cmp ' +
 					'read_line expect stdin new trim parse main println assert isalnum ' +
 					'as_bytes isalpha iscntrl isdigit isgraph islower isprint ' +
 					'ispunct isspace isupper isxdigit tolower toupper errno localeconv ' +
