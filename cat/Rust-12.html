@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
+	<meta name="author" content="NikkoCat.COM">
+	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
+	<title>Rust-12-错误处理 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
+	<link rel="stylesheet" type="text/css" href="../css/basic.css">
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!-- 代码块高亮js -->
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript">
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+	<!--header -->
+	<header id="nav">
+			<div class="nav-container"> 
+				<!-- 根大纲-->
+				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+					<h1 class="nav-logo">阳光猫小黑</h1>
+				</a>
+				<h2 class="nav-site-description desc-hidden">
+					阳光猫小黑
+				</h2>
+				<nav class="nav-links"> 
+					<!-- nav连接大纲-->
+					<h1 style="display:none;">网站导航</h1> 
+					<ul>
+						<li class="active li-hidden">
+							<a href="../index.html" title="home">
+								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
+							</a>
+						</li>
+						<li class="li-hidden">
+							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="NikkoCat-YouTube" target="_blank">
+								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
+							</a>
+						</li>
+						<li>
+							<a href="../sitemap.html" title="sitemap">
+								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>	
+	</header>
+	<!-- /header -->
+
+	<!-- content-->
+	<div id="content">
+		<div class="content-container">
+			<!-- 文章区 -->
+			<article class="text-container">
+				<header class="text-header">
+					<h1>Rust-12-错误处理</h1>	
+				</header><!-- /header -->
+				<section class="text-body">
+					<h2>引言</h2>
+					<p>这篇文章介绍Rust中错误处理的几种方式。</p>
+					<!-- 目录 -->
+					<h2>文章目录</h2>
+					<ul class="contents">	
+						 <li><a href="#Rust-Debug-1">0×1.Rust中错误处理概述</a></li>
+						 <li><a href="#Rust-Debug-2">0×2.不可恢复的错误</a></li>
+						 <li><a href="#Rust-Debug-3">0×3.可恢复的错误</a></li>
+						 <li><a href="#Rust-Debug-4">0×4.panic!的使用</a></li>
+					 </ul>
+					<!-- /目录 -->
+
+					<!-- 正文 -->
+					<h2 id="Rust-Debug-1">0×1.Rust中错误处理概述</h2>
+
+					<p>在Rust中，程序编译时的错误分为可恢复与不可恢复两种类型，可恢复类型可以被错误处理语法捕捉并可以再次处理，例如：写入文件，如果文件不存在，会报错，这时候捕获这个错误，要么终止写入，要么创建出这个文件继续写入，像这种错误，就是可恢复的错误类型；而不可恢复的错误是程序执行过程中，直接报出的bug，例如访问了一个超出索引范围的值，就会触发一个不可恢复的错误。</p>
+
+					<p>对于可恢复的错误，程序会返回一个Result&lt;T,E&gt;的枚举，我们可以对这个返回的枚举进行二次处理，挽回程序继续运行（当然，如果我们没有挽回的操作，程序也会直接抛出错误，并终止程序），对于不可恢复的错误，程序会使用panic!宏直接抛出错误，并终止程序。</p>
+
+					<h2 id="Rust-Debug-2">0×2.不可恢复的错误</h2>
+
+					<p>当编译器遇到一个不可恢复的错误时，会立即调用panic!宏，打印出错误信息，并且终止程序的运行，然后回收掉所有的资源占用，释放内存。</p>
+
+					<p>而当Rust调用panic!宏之后，默认情况下，是由Rust编译器本身去释放占用的资源，在释放的过程中程序仍然在运行，而不是立即终止，对于较大一点的程序，这个过程会比较费时，效率较低，如果我们需要立即终止程序，还可以选择一种更加洒脱的方式，让操作系统自己去回收这些资源，可以通过修改Cargo.toml配置文件来实现：</p>
+					<pre class="brush: c;">
+					[package]
+					name = "NikkoCat_COM"
+					version = "0.1.0"
+					edition = "2021"
+
+					[dependencies]
+
+					#在文件中添加下面的配置
+					#当发生panic时，程序会立即终止
+					#操作系统稍后会自动回收程序占用的资源
+					[profile.release]
+					panic = 'abort'
+					</pre>
+
+					<p>我们可以手动来创建一个panic，请看下面的实例：</p>
+					<pre class="brush: c;">
+					fn main() {
+					    panic!("NikkoCat.com PANIC!");
+					}
+
+					程序输出：
+					thread 'main' panicked at 'NikkoCat.com PANIC!', /main.rs:2:5
+					note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+					</pre>
+					<p>再来看一个实例，当我们去访问集合中不存在的索引时，会发生一个索引越界panic：</p>
+					<pre class="brush: c;">
+					//程序编译会成功，但是程序执行时会发生panic
+					fn main() {
+					    let vlist=vec![1,2,3,4,5,6];
+					    println!("{}",vlist[100]);
+					}
+
+					程序输出：
+					thread 'main' panicked at 'index out of bounds: the len is 6 but the index is 100', /main.rs:7:19
+					note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+					</pre>
+
+					<p>通过上面两个例子可以看出，panic可以发生在我们编写的代码中，可以被我们主动抛出，也可以是在执行过程中，发生在调用其他标准库文件时，如果我们想追溯发生panic的源头文件，可以根据上面的提示，设置环境变量再执行程序，如下：</p>
+					<pre class="brush: c;">
+					//在windows中执行
+					set RUST_BACKTRACE=1
+
+					//在linux中执行
+					export RUST_BACKTRACE=1
+
+					//再次执行上面的程序就会看到更加详细的panic追溯详细
+					//第6行就是我们的代码，在第6行以上，是我们代码调用的代码
+					//第6行以下就是调用了我们代码的代码
+					//在这些调用中，包含了Rust的第三方库，标准库，核心库等等
+					thread 'main' panicked at 'index out of bounds: the len is 6 but the index is 100', ./main.rs:3:19
+					stack backtrace:
+					   0: rust_begin_unwind
+					             at /rustc/7737e0b5c4103216d6fd8cf941b7ab9bdbaace7c/library/std/src/panicking.rs:584:5
+					   1: core::panicking::panic_fmt
+					             at /rustc/7737e0b5c4103216d6fd8cf941b7ab9bdbaace7c/library/core/src/panicking.rs:143:14
+					   2: core::panicking::panic_bounds_check
+					             at /rustc/7737e0b5c4103216d6fd8cf941b7ab9bdbaace7c/library/core/src/panicking.rs:85:5
+					   3: &lt;usize as core::slice::index::SliceIndex&lt;[T]&gt;&gt;::index
+					   4: core::slice::index::&lt;impl core::ops::index::Index&lt;I&gt; for [T]&gt;::index
+					   5: &lt;alloc::vec::Vec&lt;T,A&gt; as core::ops::index::Index&lt;I&gt;&gt;::index
+					   6: main::main
+					   7: core::ops::function::FnOnce::call_once
+					note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+					//如果将环境变量设置成RUST_BACKTRACE=full，就能看到完整的追溯详细
+					//另外需要注意的是，在使用cargo编译程序时，如果使用了--release参数，则不会显示上面的追溯信息
+					</pre>
+
+					<h2 id="Rust-Debug-3">0×3.可恢复的错误</h2>
+					<p>在Rust中，通常情况下的错误，是由一些可以解释，并且能够及时响应的问题引起的，比如说打开一个文件，文件不存在，我们通常可以选择创建这个文件，或提示用户文件不存在，在Rust中这种可被捕获，并且可以二次操作的错误，会返回一个Result&lt;T,E&gt;枚举，这个枚举的结构如下：</p>
+
+					<pre class="brush: c;">
+					//当调用某个返回值是Result&lt;T,E&gt; 的函数时，如果程序执行成功，则会返回OK中的T，如果执行失败，则会返回Err中的E
+					Result&lt;T,E&gt; {
+						Ok(T),
+						Err(E),
+					}
+					</pre>
+
+					<p>来看一个文件读写的实例：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+					fn main() {
+					    let f=File::open(
+					        "/home/NikkoCat/NikkoCat.txt");
+
+					    let f_result=match f {
+					        Ok(rf) => rf,
+					        Err(e) => {
+					            panic!("Error opening file: {:?}", e);
+					        },
+					    };
+
+					    println!("{:?}", f_result);
+					}
+
+					程序输出：
+					//如果文件不存在
+					thread 'main' panicked at 'Error opening file: Os { code: 2, kind: NotFound, message: "No such file or directory" }', /home/NikkoCat/main.rs:10:13
+					note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+					//如果文件存在
+					File { fd: 3, path: "/home/NikkoCat/NikkoCat.txt", read: true, write: false }
+					</pre>
+					<p>对于上面段程序，还有个很简洁的方法，使用unwrap()函数：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt";
+					    //unwrap()方法可以接收Result&lt;T,E&gt;返回值并进行匹配
+					    //当我们尝试打开一个文件的时候
+					    //如果能够成功打开，unwrap()方法就会自动调用Ok()并返回File
+					    //如果不能成功打开，unwrap()方法就会调用Err()并触发一个panic
+					    let f_result= File::open(path).unwrap();
+					    println!("{:?}", f_result);
+					}
+
+					程序输出：
+					//如果文件不存在
+					thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }', /home/NikkoCat/main.rs:6:36
+					note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+					//如果文件存在
+					File { fd: 3, path: "/home/NikkoCat/NikkoCat.txt", read: true, write: false }
+					</pre>
+
+					<p>unwrap()相当于match的一个快捷方式，但unwrap()有一个缺点，就是不能自定义panic抛出的消息，对于这个缺点，Rust提供了另外一个方法expect，他的功能与unwrap类似，但是可以在unwrap的基础上自定义返回的panic错误消息，请看下面的实例：</p>
+
+					<pre class="brush: c;">
+					use std::fs::File;
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt";
+
+					    let f_result= File::open(path).expect("Couldn't open file");
+					    println!("{:?}", f_result);
+					}
+
+					程序输出：
+					//如果文件不存在，可以在错误消息中看到我们自定义的那一句“Couldn't open file”
+					thread 'main' panicked at 'Couldn't open file: Os { code: 2, kind: NotFound, message: "No such file or directory" }', /home/NikkoCat/NikkoCat.txt:6:36
+					note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+					</pre>
+
+					<p>再来看一个实例，如果文件不存在，则创建它：</p>
+					<pre class="brush: c;">
+					use std::{fs::File, io::ErrorKind};
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt";
+					    let f=File::open(path);
+
+					    let f_result=match f {
+					        Ok(rf) => rf,
+					        //使用kind函数来匹配错误
+					        Err(e) => match e.kind() {
+					        	//如果文件不存在，则创建这个文件
+					            ErrorKind::NotFound => match File::create(path) {
+					            	//如果文件创建成功，则返回File类型
+					                Ok(create_file) => create_file,
+					                //如果创建失败，则抛出错误
+					                Err(e) => panic!("Error create file: {:?}", e),
+					            },
+					            //error是自定义的名称，类型为ErrorKind
+					            //当没匹配到NotFound这个错误时，就直接调用最后这一句，抛出错误
+					            error => panic!("Error opening file: {:?}", error),
+					        },
+					    };
+					    println!("{:?}", f_result);
+					}
+					</pre>
+
+					<p>上面这段代码，还有一个更加简洁的方法，效果相同，这些方法后面的文章会有介绍：</p>
+					<pre class="brush: c;">
+					use std::{fs::File, io::ErrorKind};
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt";
+
+					    let f_result= File::open(path).unwrap_or_else(|error|{
+					        if error.kind() == ErrorKind::NotFound {
+					            File::create(path).unwrap_or_else(|error| {
+					                panic!("Couldn't create file: {}", error);
+					            })
+					        } else {
+					            panic!("Couldn't open file: {}", error);
+					        }
+					    });
+					    println!("{:?}", f_result);
+					}
+					</pre>
+
+					<p>使用函数返回Result&lt;T, E&gt;类型的一个实例：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+					use std::io::{self,Read};
+
+					//这个函数，返回一个Result&lt;T, E&gt;类型，T用String类型代替，E用io::Error代替
+					fn read_string_from_file(path:&String) -> Result&lt;String, io::Error&gt; {
+					    let f1=File::open(path);
+					    //首先对打开文件进行判断，如果文件打开成功，返回文件本身，如果打开错误，返回一个错误给调用者
+					    let mut f2=match f1 {
+					        Ok(file) => file,
+					        //函数在return这里会返回，并不再执行接下来的内容
+					        Err(err) => return Err(err), 
+					    }; 
+
+					    //新建一个String用于接收文件中的内容
+					    let mut s1=String::new();
+					    //将文件内容放入s1变量中
+					    //这个match代码块没有使用分号作为结束，说明这个代码段的返回值就是函数的默认返回值
+					    match f2.read_to_string(&mut s1) {
+					    	//如果文件内容读取成功直接返回Ok(s1)
+					        Ok(_) => Ok(s1),
+					        Err(err) => Err(err),
+					    }
+					}
+
+					fn main() {
+					    let path="/home/NikkoCat/NikkoCat.txt".to_string();
+					    //使用match判断read_string_from_file函数是否执行成功，如果成功取出文件中的内容打印
+					    match read_string_from_file(&path) {
+					        Ok(s) => println!("{}", s),
+					        Err(err) => println!("{}", err),
+					    };
+					}
+
+					程序输出：
+					//如果文件存在并有内容
+					NikkoCat.com
+
+					//如果文件不存在
+					No such file or directory (os error 2)
+					</pre>
+
+					<p>使用"问号"表达式代替match匹配Result返回结果，上面的代码可以简化成下面的形式：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+					use std::io::{self,Read};
+
+					fn read_string_from_file(path:&String) -> Result&lt;String, io::Error&gt;  {
+						//在open函数后面加一个问好，如果打开成功程序会返回Ok(f)中的表达式中的f，否则返回return Err(err)
+					    let mut f1=File::open(path)?;
+
+					    //上面这个问号就能代替下面这一段
+					    // let mut f2=match f1 {
+					    //     Ok(file) => file,
+					    //     Err(err) => return Err(err),
+					    // }; 
+
+					    let mut s1=String::new();
+					    f1.read_to_string(&mut s1)?;
+
+					    //同理，如果成功本来是会返回Ok(_)中包含的参数，但是我们没有用任何变量接收这个表达式的值，所以这个返回值就等于被丢弃了，如果读取失败，程序会返回一个return Err(err)
+					    // match f2.read_to_string(&mut s1) {
+					    //     Ok(_) => Ok(s1),
+					    //     Err(err) => Err(err),
+					    // }
+
+					    //在函数的最后，手动返回一个Result&lt;String, io::Error&gt;类型的表达式，包含读取的文件内容
+					    Ok(s1)
+					}
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt".to_string();
+					    match read_string_from_file(&path) {
+					        Ok(s) => println!("{}", s),
+					        Err(err) => println!("{}", err),
+					    };
+					}
+					</pre>
+					<p>总结：如果使用了问号表达式，当执行一句返回值是Result&lt;T, E&gt;类型的语句时，如果执行成功，会返回Ok(T)中的T，如果执行失败，则会调用return Err(E)，返回整个Err(E)表达式，而对于问号表达式，不仅仅用作接收Result&lt;T, E&gt;类型的表达式，还能用作接收Option枚举或Try类型的表达式。</p>
+					<p>这种设计适用于，同一个环境下有不同的错误原因，但要求这些错误原因都返回相同的错误类型。</p>
+
+					<p>上面的程序，还可以使用链式调用的方式继续优化，如下：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+					use std::io::{self,Read};
+
+					fn read_string_from_file(path:&String) -> Result&lt;String, io::Error&gt; {
+					    let mut s1=String::new();
+					    File::open(path)?.read_to_string(&mut s1)?;
+					    Ok(s1)
+					}
+
+					fn main() {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt".to_string();
+					    match read_string_from_file(&path) {
+					        Ok(s) => println!("{}", s),
+					        Err(err) => println!("{}", err),
+					    };
+					}
+					</pre>
+
+					<p>如果要在main函数中使用问号表达式，可以在main函数括号后面加上Result类型的返回值，如下：</p>
+					<pre class="brush: c;">
+					use std::fs::File;
+					use std::io::Read;
+					use std::error::Error;
+
+					//Box&lt;dyn Error&gt;相当于一个可以接收任何错误类型的盒子
+					//如果main函数中任何带问号表达式的语句发生错误，都会直接返回
+					//如果都没有报错，最后会返回一个()
+					fn main() -> Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+					    let path="/home/qing/disk/storage/rust-lab/NikkoCat.txt".to_string();
+					    let mut s1=String::new();
+					    File::open(path)?.read_to_string(&mut s1)?;
+					    println!("{}",s1);
+					    Ok(())
+					}
+
+					程序输出：
+					//当文件存在并且有内容
+					NikkoCat.com
+					
+					//当文件不存在
+					Error: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+					</pre>
+
+					<h2 id="Rust-Debug-4">0×4.panic!的使用</h2>
+					
+					<p>在Rust中不可恢复的错误会触发panic!，而可恢复的错误会返回一个Result，而大多数情况下，Rust代码的执行结果都会返回一个Result，代码的调用者可以根据实际情况主动调用panic!，从而决定这个错误需不需要做进一步处理。</p>
+
+					<p>对何时使用panic!的几点建议：</p>
+					<p class="indent-p">
+					1，非法的值，矛盾的值或空缺的值被传入；<br>
+					2，某种非预期的偶发错误，会导致代码无法继续运行；<br>
+					3，对一些错误数据的传入，在所有可以处理的方法中，没有一种好的方法能够完全处理；<br>
+					3，当调用外部代码时，外部代码返回了一些错误数据，这些数据无法被正常处理；
+					</p>
+					<p>对任何可以预测到的错误，和可以处理的预期错误，都应该使用Result来接收并做出处理。</p>
+
+
+					<!-- /正文 -->
+
+				<footer class="text-footer">
+					<p>
+						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+					</p>
+					<p>*原文连接:<a title="Rust-12-错误处理" href="https://www.nikkocat.com/cat/Rust-12.html" target="_blank">https://www.nikkocat.com/cat/Rust-12.html</a></p>
+				</footer>
+			</article>
+			<!-- /文章区 -->	
+		</div>
+	</div>
+	<!-- /content -->
+	
+	<!-- footer -->
+	<footer id="footer">
+		<div class="footer-container">
+			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+		</div>
+	</footer>
+	<!-- /footer -->
+</body>
+</html>
