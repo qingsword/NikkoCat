@@ -121,17 +121,17 @@
 
 					<p>一个loop无限循环的实例：</p>
 					<pre class="brush: c;">
-					use std::{thread, time};  //包含线程休眠定时器功能的类引用
+					use std::{thread, time::Duration}; //包含线程休眠定时器功能的类引用
 
 					fn main() {
 						//这个loop循环没有任何结束条件，将会一直循环下去
 						//为了让程序循环的慢一点，在loop中添加了线程休眠计时器
 					    loop {
 					        println!("Hello");
-					        //将线程休眠2秒（2000毫秒）
-					        thread::sleep(time::Duration::from_millis(2000));
+					        //将线程休眠3秒
+					        thread::sleep(Duration::from_secs(3));
 					        println!("NikkoCat.com");
-					        thread::sleep(time::Duration::from_millis(2000));
+					        thread::sleep(Duration::from_secs(3));
 					    }
 					}
 
